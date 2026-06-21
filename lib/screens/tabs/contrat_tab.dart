@@ -12,8 +12,10 @@ class ContratTab extends StatefulWidget {
 class _ContratTabState extends State<ContratTab> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 100),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
@@ -31,17 +33,17 @@ class _ContratTabState extends State<ContratTab> {
               const SizedBox(height: 4),
               const Text(
                 'Consultez les détails de votre contrat et de vos paiements',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textHint,
-                ),
+                style: TextStyle(fontSize: 12, color: AppColors.textHint),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              
+
               // Status Banner
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.accentGreen,
                   borderRadius: BorderRadius.circular(16),
@@ -54,34 +56,65 @@ class _ContratTabState extends State<ContratTab> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.check, color: AppColors.white, size: 14),
+                            const Icon(
+                              Icons.check,
+                              color: AppColors.white,
+                              size: 14,
+                            ),
                             const SizedBox(width: 4),
                             const Text(
                               'Actif',
-                              style: TextStyle(color: AppColors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         const Text(
                           'Du 25 Fev. 2026 au 25 Aoû. 2026',
-                          style: TextStyle(color: AppColors.white, fontSize: 12),
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        _buildCircleButton(Icons.remove_red_eye_outlined),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ClientDetailsScreen(),
+                              ),
+                            );
+                          },
+                          child: _buildCircleButton(Icons.remove_red_eye_outlined),
+                        ),
                         const SizedBox(width: 8),
-                        _buildCircleButton(Icons.download_rounded),
+                        GestureDetector(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Téléchargement bientôt disponible'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                          child: _buildCircleButton(Icons.download_rounded),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Statistics
               const Align(
                 alignment: Alignment.centerLeft,
@@ -95,7 +128,7 @@ class _ContratTabState extends State<ContratTab> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               Row(
                 children: [
                   Expanded(
@@ -155,14 +188,13 @@ class _ContratTabState extends State<ContratTab> {
             ],
           ),
         ),
-        
-        Expanded(
-          child: Container(
-            color: AppColors.white,
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              children: [
-                Row(
+
+        Container(
+          color: AppColors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
@@ -174,18 +206,29 @@ class _ContratTabState extends State<ContratTab> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.accentGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Row(
                         children: [
-                          Icon(Icons.check_circle_outline, size: 12, color: AppColors.accentGreen),
+                          Icon(
+                            Icons.check_circle_outline,
+                            size: 12,
+                            color: AppColors.accentGreen,
+                          ),
                           SizedBox(width: 4),
                           Text(
                             'À jour',
-                            style: TextStyle(fontSize: 10, color: AppColors.accentGreen, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.accentGreen,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -193,7 +236,7 @@ class _ContratTabState extends State<ContratTab> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
+
                 _buildPaymentItem(
                   date: 'Jeudi 24 Avril 2026',
                   time: '14:50 • N° 77052807',
@@ -208,11 +251,11 @@ class _ContratTabState extends State<ContratTab> {
                   amount: '10 800 F',
                   status: 'Effectué',
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       ],
+    ),
     );
   }
 
@@ -243,7 +286,9 @@ class _ContratTabState extends State<ContratTab> {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
-        border: bgColor == AppColors.grey50 ? Border.all(color: AppColors.grey200) : null,
+        border: bgColor == AppColors.grey50
+            ? Border.all(color: AppColors.grey200)
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,7 +305,11 @@ class _ContratTabState extends State<ContratTab> {
                 child: Icon(icon, size: 16, color: iconColor),
               ),
               if (showArrow)
-                Icon(Icons.chevron_right_rounded, color: textColor.withValues(alpha: 0.7), size: 18),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: textColor.withValues(alpha: 0.7),
+                  size: 18,
+                ),
             ],
           ),
           const SizedBox(height: 12),
@@ -364,7 +413,9 @@ class _ContratTabState extends State<ContratTab> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const ClientDetailsScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const ClientDetailsScreen(),
+                      ),
                     );
                   },
                   style: TextButton.styleFrom(

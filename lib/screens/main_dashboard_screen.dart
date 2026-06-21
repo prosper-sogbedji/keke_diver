@@ -15,7 +15,8 @@ class MainDashboardScreen extends ConsumerStatefulWidget {
   const MainDashboardScreen({super.key});
 
   @override
-  ConsumerState<MainDashboardScreen> createState() => _MainDashboardScreenState();
+  ConsumerState<MainDashboardScreen> createState() =>
+      _MainDashboardScreenState();
 }
 
 class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
@@ -67,7 +68,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
             ),
           ),
-          
+
           const Text(
             'Demandes de courses',
             style: TextStyle(
@@ -77,7 +78,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Request Card
           Container(
             padding: const EdgeInsets.all(16),
@@ -99,7 +100,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                             const CircleAvatar(
                               radius: 20,
                               backgroundColor: AppColors.grey200,
-                              backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=11'),
+                              backgroundImage: NetworkImage(
+                                'https://i.pravatar.cc/100?img=11',
+                              ),
                             ),
                             Positioned(
                               bottom: 0,
@@ -110,7 +113,10 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                                 decoration: BoxDecoration(
                                   color: AppColors.accentGreen,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.white, width: 2),
+                                  border: Border.all(
+                                    color: AppColors.white,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                             ),
@@ -144,7 +150,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Navigator.pop(context); // Close modal
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const RideMapScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const RideMapScreen(),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -156,13 +164,19 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                       ),
-                      child: const Text('Accepter la course', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                      child: const Text(
+                        'Accepter la course',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Route timeline
                 Row(
                   children: [
@@ -171,16 +185,24 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       height: 12,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primaryBlue, width: 3),
+                        border: Border.all(
+                          color: AppColors.primaryBlue,
+                          width: 3,
+                        ),
                       ),
                     ),
-                    Expanded(child: Container(height: 2, color: AppColors.grey200)),
+                    Expanded(
+                      child: Container(height: 2, color: AppColors.grey200),
+                    ),
                     Container(
                       width: 12,
                       height: 12,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.accentGreen, width: 3),
+                        border: Border.all(
+                          color: AppColors.accentGreen,
+                          width: 3,
+                        ),
                       ),
                     ),
                   ],
@@ -194,36 +216,54 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       children: [
                         Text(
                           'Gbegamey, Cotonou',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                         Text(
                           'Départ à 5 min de vous',
-                          style: TextStyle(fontSize: 11, color: AppColors.textHint),
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
                         ),
                       ],
                     ),
-                    const Icon(Icons.arrow_forward_rounded, size: 16, color: AppColors.grey400),
+                    const Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 16,
+                      color: AppColors.grey400,
+                    ),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           'Boulevard Steinmetz, Cotonou',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                         Text(
                           'Arrivée',
-                          style: TextStyle(fontSize: 11, color: AppColors.textHint),
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                
+
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Divider(color: AppColors.grey200, height: 1),
                 ),
-                
+
                 // Stats row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,26 +271,65 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Tarif estimé', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
+                        Text(
+                          'Tarif estimé',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
                         SizedBox(height: 4),
-                        Text('1 200F', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                        Text(
+                          '1 200F',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                     Container(width: 1, height: 30, color: AppColors.grey200),
                     const Column(
                       children: [
-                        Text('Distance', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
+                        Text(
+                          'Distance',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
                         SizedBox(height: 4),
-                        Text('14,08 km', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                        Text(
+                          '14,08 km',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                     Container(width: 1, height: 30, color: AppColors.grey200),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('Durée', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
+                        Text(
+                          'Durée',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
                         SizedBox(height: 4),
-                        Text('≈1h20 min', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                        Text(
+                          '≈1h20 min',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -258,9 +337,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           SizedBox(
             height: 52,
             child: OutlinedButton(
@@ -272,19 +351,19 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   borderRadius: BorderRadius.circular(26),
                 ),
               ),
-              child: const Text('Ignorer la demande', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+              child: const Text(
+                'Ignorer la demande',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           const Text(
             'Cette demande disparaîtra automatiquement dans 4:59',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: AppColors.textHint,
-            ),
+            style: TextStyle(fontSize: 12, color: AppColors.textHint),
           ),
         ],
       ),
@@ -294,11 +373,15 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: _buildBody(),
+      body: SafeArea(bottom: false, child: _buildBody()),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+          child: _buildBottomNavigationBar(),
+        ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -316,17 +399,14 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         return const ProfilTab();
       default:
         return const Center(
-          child: Text(
-            'Support',
-            style: TextStyle(color: AppColors.textHint),
-          ),
+          child: Text('Inconnu', style: TextStyle(color: AppColors.textHint)),
         );
     }
   }
 
   Widget _buildAccueilTab() {
     final isActive = ref.watch(isDriverActiveProvider);
-    
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -348,32 +428,19 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildHeader() {
     final user = ref.watch(userProvider);
-    
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: CustomPaint(
-                  painter: _MiniKekeLogoPainter(),
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Text(
-                'Littoral >',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
+          Image.asset(
+            'assets/images/logo_blue.png',
+            height: 32,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.broken_image, color: AppColors.primaryBlue, size: 32);
+            },
           ),
           Row(
             children: [
@@ -381,7 +448,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
+                    ),
                   );
                 },
                 onLongPress: _showRideRequest,
@@ -413,21 +482,30 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
-              CircleAvatar(
-                radius: 18,
-                backgroundColor: AppColors.primaryBlue,
-                backgroundImage: NetworkImage(user.profileImageUrl),
-                child: user.profileImageUrl.isEmpty 
-                    ? Text(
-                        user.firstName.isNotEmpty ? user.firstName[0].toUpperCase() : 'A',
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+              const SizedBox(width: 16),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => Scaffold(
+                        appBar: AppBar(
+                          backgroundColor: AppColors.white,
+                          elevation: 0,
+                          iconTheme: const IconThemeData(
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                      ) 
-                    : null,
+                        body: const ProfilTab(),
+                      ),
+                    ),
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: AppColors.grey200,
+                  backgroundImage: NetworkImage(user.profileImageUrl),
+                ),
               ),
             ],
           ),
@@ -454,10 +532,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               children: [
                 const Text(
                   'Portefeuille',
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: AppColors.white, fontSize: 12),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -472,11 +547,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             ),
             Row(
               children: [
-                _buildCardButton(Icons.add),
+                _buildCardButton(Icons.add, onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Rechargement bientôt disponible'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }),
                 const SizedBox(width: 12),
-                _buildCardButton(Icons.upload_rounded),
+                _buildCardButton(Icons.upload_rounded, onTap: () {
+                  setState(() => _currentIndex = 1);
+                }),
                 const SizedBox(width: 12),
-                _buildCardButton(Icons.history_rounded), // New button in this mockup
+                _buildCardButton(Icons.history_rounded, onTap: () {
+                  setState(() => _currentIndex = 3);
+                }),
               ],
             ),
           ],
@@ -485,18 +571,17 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     );
   }
 
-  Widget _buildCardButton(IconData icon) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        icon,
-        color: AppColors.primaryBlue,
-        size: 20,
+  Widget _buildCardButton(IconData icon, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: AppColors.primaryBlue, size: 20),
       ),
     );
   }
@@ -504,9 +589,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   Widget _buildStatusSection() {
     final isActive = ref.watch(isDriverActiveProvider);
     final user = ref.watch(userProvider);
-    
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -527,7 +612,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                     isActive ? 'Actif' : 'Inactif',
                     style: TextStyle(
                       fontSize: 12,
-                      color: isActive ? AppColors.accentGreen : AppColors.textHint,
+                      color: isActive
+                          ? AppColors.accentGreen
+                          : AppColors.textHint,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -553,10 +640,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           const SizedBox(height: 8),
           const Text(
             'Bienvenue sur votre tableau de bord',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.textHint,
-            ),
+            style: TextStyle(fontSize: 13, color: AppColors.textHint),
           ),
         ],
       ),
@@ -600,7 +684,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   Widget _buildServiceOption(String text) {
     final selectedService = ref.watch(selectedServiceProvider);
     final isSelected = selectedService == text;
-    
+
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -642,7 +726,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 const CircleAvatar(
                   radius: 20,
                   backgroundColor: AppColors.grey200,
-                  backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=11'),
+                  backgroundImage: NetworkImage(
+                    'https://i.pravatar.cc/100?img=11',
+                  ),
                 ),
                 const SizedBox(width: 12),
                 const Expanded(
@@ -668,7 +754,10 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.accentGreen.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),
@@ -689,9 +778,31 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               children: [
                 Row(
                   children: [
-                    Container(width: 12, height: 12, decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primaryBlue, width: 3))),
-                    Expanded(child: Container(height: 2, color: AppColors.primaryBlue)),
-                    Container(width: 12, height: 12, decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.accentGreen, width: 3))),
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primaryBlue,
+                          width: 3,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(height: 2, color: AppColors.primaryBlue),
+                    ),
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.accentGreen,
+                          width: 3,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -702,23 +813,57 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('Gbegamey, Cotonou', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary), overflow: TextOverflow.ellipsis),
+                          Text(
+                            'Gbegamey, Cotonou',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           SizedBox(height: 2),
-                          Text('Départ à 5 min de vous', style: TextStyle(fontSize: 11, color: AppColors.textHint), overflow: TextOverflow.ellipsis),
+                          Text(
+                            'Départ à 5 min de vous',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textHint,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(Icons.arrow_forward_rounded, size: 16, color: AppColors.textHint),
+                      child: Icon(
+                        Icons.arrow_forward_rounded,
+                        size: 16,
+                        color: AppColors.textHint,
+                      ),
                     ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('Boulevard Steinmetz, Cotonou', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary), overflow: TextOverflow.ellipsis),
+                          Text(
+                            'Boulevard Steinmetz, Cotonou',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           SizedBox(height: 2),
-                          Text('Arrivée', style: TextStyle(fontSize: 11, color: AppColors.textHint), overflow: TextOverflow.ellipsis),
+                          Text(
+                            'Arrivée',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textHint,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ),
@@ -737,9 +882,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Expanded(
                     child: Column(
                       children: const [
-                        Text('Tarif estimé', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
+                        Text(
+                          'Tarif estimé',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
                         SizedBox(height: 4),
-                        Text('1 200F', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                        Text(
+                          '1 200F',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -747,9 +905,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Expanded(
                     child: Column(
                       children: const [
-                        Text('Distance', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
+                        Text(
+                          'Distance',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
                         SizedBox(height: 4),
-                        Text('14,08 km', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                        Text(
+                          '14,08 km',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -757,9 +928,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Expanded(
                     child: Column(
                       children: const [
-                        Text('Durée', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
+                        Text(
+                          'Durée',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
                         SizedBox(height: 4),
-                        Text('≈1h20 min', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                        Text(
+                          '≈1h20 min',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -823,7 +1007,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.textHint),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        size: 16,
+                        color: AppColors.textHint,
+                      ),
                     ],
                   ),
                 ],
@@ -873,10 +1061,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               children: [
                 Text(
                   'Type de contrat',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textHint,
-                  ),
+                  style: TextStyle(fontSize: 12, color: AppColors.textHint),
                 ),
                 SizedBox(height: 4),
                 Text(
@@ -897,7 +1082,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.verified_outlined, size: 14, color: AppColors.accentGreen),
+                  Icon(
+                    Icons.verified_outlined,
+                    size: 14,
+                    color: AppColors.accentGreen,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     'À jour',
@@ -933,14 +1122,23 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.grey200),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Row(
                   children: [
-                    Text('Aujourd\'hui', style: TextStyle(fontSize: 12, color: AppColors.textPrimary)),
+                    Text(
+                      'Aujourd\'hui',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
                     SizedBox(width: 4),
                     Icon(Icons.keyboard_arrow_down_rounded, size: 16),
                   ],
@@ -953,7 +1151,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             children: [
               Expanded(
                 child: _buildStatCard(
-                  icon: Icons.pedal_bike_rounded, // fallback icon
+                  icon: Icons.pedal_bike_rounded,
                   title: '36',
                   subtitle: 'Courses effectuées',
                   bgColor: AppColors.grey50,
@@ -989,6 +1187,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   iconBgColor: AppColors.white,
                   iconColor: const Color(0xFFB91D34),
                   showArrow: true,
+                  onTap: () => setState(() => _currentIndex = 2),
                 ),
               ),
               const SizedBox(width: 12),
@@ -1002,6 +1201,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   iconBgColor: AppColors.white,
                   iconColor: AppColors.accentGreen,
                   showArrow: true,
+                  onTap: () => setState(() => _currentIndex = 4),
                 ),
               ),
             ],
@@ -1020,55 +1220,63 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     required Color iconBgColor,
     required Color iconColor,
     bool showArrow = false,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: iconBgColor,
-                  borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, size: 16, color: iconColor),
                 ),
-                child: Icon(icon, size: 16, color: iconColor),
+                if (showArrow)
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    color: textColor.withValues(alpha: 0.7),
+                    size: 18,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: textColor,
               ),
-              if (showArrow)
-                Icon(Icons.chevron_right_rounded, color: textColor.withValues(alpha: 0.7), size: 18),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: textColor,
             ),
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 11,
-              color: textColor.withValues(alpha: 0.8),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 11,
+                color: textColor.withValues(alpha: 0.8),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildRecentActivities() {
     final recentRides = ref.watch(recentRidesProvider);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -1086,7 +1294,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => setState(() => _currentIndex = 3),
                 child: const Row(
                   children: [
                     Text(
@@ -1097,75 +1305,84 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         color: AppColors.primaryBlue,
                       ),
                     ),
-                    Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primaryBlue),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 16,
+                      color: AppColors.primaryBlue,
+                    ),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          ...recentRides.map((ride) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: AppColors.grey200,
-                      backgroundImage: NetworkImage(ride.clientImageUrl),
-                    ),
-                    if (ride.status == RideStatus.completed)
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppColors.accentGreen,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.white, width: 2),
+          ...recentRides.map(
+            (ride) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 18,
+                        backgroundColor: AppColors.grey200,
+                        backgroundImage: NetworkImage(ride.clientImageUrl),
+                      ),
+                      if (ride.status == RideStatus.completed)
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: AppColors.accentGreen,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.white,
+                                width: 2,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ride.clientName,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        '${ride.date.hour}:${ride.date.minute.toString().padLeft(2, '0')} • N° ${ride.id.toUpperCase()}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppColors.textHint,
-                        ),
-                      ),
                     ],
                   ),
-                ),
-                Text(
-                  '${ride.price.toInt()} F',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ride.clientName,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        Text(
+                          '${ride.date.hour}:${ride.date.minute.toString().padLeft(2, '0')} • N° ${ride.id.toUpperCase()}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textHint,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Text(
+                    '${ride.price.toInt()} F',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
         ],
       ),
     );
@@ -1173,22 +1390,19 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildBottomNavigationBar() {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF2B364A),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2B364A),
+        borderRadius: BorderRadius.circular(30),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.home_filled, 'Accueil'),
+          _buildNavItem(0, Icons.home_outlined, 'Accueil'),
           _buildNavItem(1, Icons.payments_outlined, 'Paiements'),
-          _buildNavItem(2, Icons.description_outlined, 'Contrat'),
-          _buildNavItem(3, Icons.insert_drive_file_outlined, 'Activité'),
-          _buildNavItem(4, Icons.person_outline, 'Profil'),
+          _buildNavItem(2, Icons.insert_drive_file_outlined, 'Contrat'),
+          _buildNavItem(3, Icons.article_outlined, 'Activité'),
+          _buildNavItem(4, Icons.person_outline_rounded, 'Profil'),
         ],
       ),
     );
@@ -1203,7 +1417,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         children: [
           Icon(
             icon,
-            color: isSelected ? AppColors.white : AppColors.textHint.withValues(alpha: 0.5),
+            color: isSelected
+                ? AppColors.white
+                : AppColors.textHint.withValues(alpha: 0.5),
             size: 24,
           ),
           const SizedBox(height: 4),
@@ -1212,7 +1428,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             style: TextStyle(
               fontSize: 10,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-              color: isSelected ? AppColors.white : AppColors.textHint.withValues(alpha: 0.5),
+              color: isSelected
+                  ? AppColors.white
+                  : AppColors.textHint.withValues(alpha: 0.5),
             ),
           ),
         ],

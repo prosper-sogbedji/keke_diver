@@ -192,7 +192,14 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                   Expanded(
                     flex: 1,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Support en cours de développement'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2B364A),
                         foregroundColor: AppColors.white,

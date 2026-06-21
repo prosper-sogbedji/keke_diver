@@ -36,13 +36,10 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
               const SizedBox(height: 4),
               const Text(
                 'Consultez et les informations de votre profil',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textHint,
-                ),
+                style: TextStyle(fontSize: 12, color: AppColors.textHint),
               ),
               const SizedBox(height: 24),
-              
+
               // Profile Card
               Container(
                 padding: const EdgeInsets.all(16),
@@ -69,9 +66,16 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                               decoration: BoxDecoration(
                                 color: AppColors.accentGreen,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.white, width: 2),
+                                border: Border.all(
+                                  color: AppColors.white,
+                                  width: 2,
+                                ),
                               ),
-                              child: const Icon(Icons.check, size: 10, color: AppColors.white),
+                              child: const Icon(
+                                Icons.check,
+                                size: 10,
+                                color: AppColors.white,
+                              ),
                             ),
                           ),
                       ],
@@ -100,9 +104,20 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              const Icon(Icons.star, color: Color(0xFFFFB800), size: 14),
+                              const Icon(
+                                Icons.star,
+                                color: Color(0xFFFFB800),
+                                size: 14,
+                              ),
                               const SizedBox(width: 4),
-                              Text('${user.rating}', style: const TextStyle(color: AppColors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                              Text(
+                                '${user.rating}',
+                                style: const TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -115,7 +130,11 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                         color: AppColors.white,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.ios_share, color: Color(0xFF0F265C), size: 20),
+                      child: const Icon(
+                        Icons.ios_share,
+                        color: Color(0xFF0F265C),
+                        size: 20,
+                      ),
                     ),
                   ],
                 ),
@@ -123,10 +142,10 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
             ],
           ),
         ),
-        
+
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 100),
             children: [
               const Text(
                 'Compte',
@@ -137,7 +156,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               _buildSettingsItem(
                 icon: Icons.person_outline,
                 title: 'Informations personnelles',
@@ -148,17 +167,31 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                 icon: Icons.payments_outlined,
                 title: 'Moyens de paiement',
                 subtitle: 'MTN MoMo, Moov Money, Celtiis Cash',
-                onTap: () {},
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Fonctionnalité bientôt disponible'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
               _buildSettingsItem(
                 icon: Icons.star_outline_rounded,
                 title: 'Avis et notations',
                 subtitle: 'Commentaires',
-                onTap: () {},
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Fonctionnalité bientôt disponible'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               const Text(
                 'Préférences',
                 style: TextStyle(
@@ -168,7 +201,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               _buildSettingsItem(
                 icon: Icons.notifications_none_rounded,
                 title: 'Notifications',
@@ -188,13 +221,27 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                 icon: Icons.language,
                 title: 'Langue',
                 subtitle: 'Français',
-                onTap: () {},
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Fonctionnalité bientôt disponible'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
               _buildSettingsItem(
                 icon: Icons.dark_mode_outlined,
                 title: 'Thème de l\'application',
                 subtitle: 'Clair',
-                onTap: () {},
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Fonctionnalité bientôt disponible'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 24),
             ],
@@ -255,7 +302,13 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                 ],
               ),
             ),
-            if (trailing != null) trailing else const Icon(Icons.chevron_right_rounded, color: AppColors.textHint),
+            if (trailing != null)
+              trailing
+            else
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textHint,
+              ),
           ],
         ),
       ),
@@ -304,15 +357,15 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                 ),
               ),
               const SizedBox(height: 24),
-              
+
               _buildEditableField('Nom', 'YACOUBOU'),
               const SizedBox(height: 16),
               _buildEditableField('Prénom', 'Dieu-donné'),
               const SizedBox(height: 16),
               _buildEditableField('Adresse mail', 'ddonneyacoubou@gmail.com'),
-              
+
               const SizedBox(height: 32),
-              
+
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
@@ -324,7 +377,10 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Enregistrer', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                child: const Text(
+                  'Enregistrer',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
               ),
               const SizedBox(height: 16),
             ],
@@ -344,12 +400,24 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
       ),
       child: TextFormField(
         initialValue: value,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textPrimary,
+        ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(fontSize: 12, color: AppColors.textHint, fontWeight: FontWeight.normal),
+          labelStyle: const TextStyle(
+            fontSize: 12,
+            color: AppColors.textHint,
+            fontWeight: FontWeight.normal,
+          ),
           border: InputBorder.none,
-          suffixIcon: const Icon(Icons.edit_outlined, size: 16, color: AppColors.textHint),
+          suffixIcon: const Icon(
+            Icons.edit_outlined,
+            size: 16,
+            color: AppColors.textHint,
+          ),
         ),
       ),
     );

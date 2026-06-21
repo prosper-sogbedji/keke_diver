@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../utils/app_colors.dart';
-import 'dashboard_screen.dart';
+import 'main_dashboard_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+        MaterialPageRoute(builder: (_) => const MainDashboardScreen()),
         (route) => false,
       );
     }

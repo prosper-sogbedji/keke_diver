@@ -25,8 +25,9 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 8),
               const Text(
-                'Paiements',
+                'Vos revenus',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -53,7 +54,8 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    Expanded(
+                      child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
@@ -73,6 +75,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                           ),
                         ),
                       ],
+                    ),
                     ),
                     Row(
                       children: [
@@ -94,7 +97,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildFilterDropdown('Tout'),
+                    _buildFilterDropdown('Tout', isSelected: true),
                     const SizedBox(width: 8),
                     _buildFilterDropdown('Date'),
                     const SizedBox(width: 8),
@@ -110,16 +113,41 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
         
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            itemCount: transactions.length,
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 100),
+            itemCount: transactions.length + 1, // +1 for the header
             itemBuilder: (context, index) {
-              final tx = transactions[index];
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16, top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '25 Avril 2026',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        '2 transaction',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.textHint.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              final tx = transactions[index - 1];
               return _buildTransactionItem(
-                title: tx.title,
-                subtitle: tx.description,
-                amount: '${tx.isCredit ? '+' : ''}${tx.amount.toInt()} F',
-                status: tx.isCredit ? 'Effectué' : 'Terminé',
-                isCredit: tx.isCredit,
+                title: 'Chez Maman Ella',
+                subtitle: 'Livraison de [ 1x Côme + Poisson + Supplément ]',
+                amount: '1 200 F',
+                status: 'Effectué',
+                isCredit: true,
               );
             },
           ),
@@ -147,27 +175,27 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
     );
   }
 
-  Widget _buildFilterDropdown(String label, {bool showArrow = true}) {
+  Widget _buildFilterDropdown(String label, {bool showArrow = true, bool isSelected = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isSelected ? const Color(0xFF2B364A) : Colors.transparent,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.textPrimary),
+        border: Border.all(color: isSelected ? const Color(0xFF2B364A) : AppColors.textPrimary),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: isSelected ? AppColors.white : AppColors.textPrimary,
               fontSize: 12,
             ),
           ),
           if (showArrow) ...[
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, size: 16, color: AppColors.textPrimary),
+            Icon(Icons.keyboard_arrow_down_rounded, size: 16, color: isSelected ? AppColors.white : AppColors.textPrimary),
           ],
         ],
       ),
@@ -206,15 +234,9 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.accentGreen,
                     shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      isCredit ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded, 
-                      size: 8, 
-                      color: isCredit ? AppColors.accentGreen : const Color(0xFFE53935),
-                    ),
+                    border: Border.all(color: AppColors.white, width: 1.5),
                   ),
                 ),
               ),
@@ -344,40 +366,62 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
             const SizedBox(height: 24),
             
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: AppColors.grey50,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.grey200),
               ),
-              child: TextFormField(
-                initialValue: '20 000 F',
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                decoration: const InputDecoration(
-                  labelText: 'Montant à retirer',
-                  labelStyle: TextStyle(fontSize: 12, color: AppColors.textHint, fontWeight: FontWeight.normal),
-                  border: InputBorder.none,
-                  suffixIcon: Icon(Icons.backspace_outlined, size: 16, color: AppColors.textHint),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        '20 000 F',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Montant à retirer',
+                        style: TextStyle(fontSize: 11, color: AppColors.textHint),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.textHint, width: 1.5),
+                    ),
+                    child: const Icon(Icons.close, size: 10, color: AppColors.textHint),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
             
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: AppColors.grey50,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.grey200),
               ),
-              child: TextFormField(
-                initialValue: '+2290196000102',
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                decoration: const InputDecoration(
-                  labelText: 'Numéro de téléphone',
-                  labelStyle: TextStyle(fontSize: 12, color: AppColors.textHint, fontWeight: FontWeight.normal),
-                  border: InputBorder.none,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    '+2290196000102',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Numéro de téléphone',
+                    style: TextStyle(fontSize: 11, color: AppColors.textHint),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
@@ -404,12 +448,12 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
             
             Row(
               children: [
-                const Icon(Icons.download_rounded, size: 16, color: AppColors.textHint),
-                const SizedBox(width: 8),
+                const Icon(Icons.file_download_outlined, size: 20, color: AppColors.textPrimary),
+                const SizedBox(width: 12),
                 const Expanded(
                   child: Text(
                     'Télécharger la facture après le paiement',
-                    style: TextStyle(fontSize: 12, color: AppColors.textHint),
+                    style: TextStyle(fontSize: 13, color: AppColors.textPrimary),
                   ),
                 ),
                 Switch(

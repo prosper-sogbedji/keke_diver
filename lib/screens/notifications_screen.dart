@@ -63,7 +63,14 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                       ],
                     ),
                     TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Toutes les notifications marquées comme lues'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.done_all_rounded, size: 16, color: AppColors.textPrimary),
                       label: const Text(
                         'Tout marquer comme lu',

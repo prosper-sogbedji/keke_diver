@@ -379,7 +379,7 @@ class _RideMapScreenState extends State<RideMapScreen> {
                       Expanded(
                         flex: 1,
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () => Navigator.pop(context),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.textPrimary,
                             side: const BorderSide(color: Color(0xFF2B364A)),
@@ -410,7 +410,10 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
-                          child: const Text('Je suis arrivé', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          child: const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Je suis arrivé', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          ),
                         ),
                       ),
                     ],
@@ -421,7 +424,14 @@ class _RideMapScreenState extends State<RideMapScreen> {
                       Expanded(
                         flex: 1,
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Support en cours de développement'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.textPrimary,
                             side: const BorderSide(color: Color(0xFF2B364A)),
@@ -452,7 +462,10 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
-                          child: const Text('Commencer la course', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          child: const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Commencer la course', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          ),
                         ),
                       ),
                     ],
@@ -494,7 +507,10 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
-                          child: const Text('Terminer la course', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          child: const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Terminer la course', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          ),
                         ),
                       ),
                     ],

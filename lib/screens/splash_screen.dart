@@ -34,9 +34,10 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.5,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
 
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -56,8 +57,8 @@ class _SplashScreenState extends State<SplashScreen>
                 const OnboardingScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
             transitionDuration: const Duration(milliseconds: 800),
           ),
         );
@@ -97,9 +98,7 @@ class _SplashScreenState extends State<SplashScreen>
     return SizedBox(
       width: 100,
       height: 100,
-      child: CustomPaint(
-        painter: _KekeLogoPainter(),
-      ),
+      child: CustomPaint(painter: _KekeLogoPainter()),
     );
   }
 }

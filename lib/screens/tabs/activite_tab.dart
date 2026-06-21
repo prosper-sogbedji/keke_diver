@@ -21,9 +21,10 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
           child: Column(
             children: [
+              const SizedBox(height: 8),
               const Text(
                 'Activités récentes',
                 style: TextStyle(
@@ -35,13 +36,10 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
               const SizedBox(height: 4),
               const Text(
                 'Consultez l\'historique de vos déplacements',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textHint,
-                ),
+                style: TextStyle(fontSize: 12, color: AppColors.textHint),
               ),
               const SizedBox(height: 24),
-              
+
               // Categories
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -57,31 +55,38 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Filters
-              Row(
-                children: [
-                  _buildSubFilter('Tout'),
-                  const SizedBox(width: 12),
-                  _buildSubFilter('En cours', color: AppColors.primaryBlue),
-                  const SizedBox(width: 12),
-                  _buildSubFilter('Terminées', color: AppColors.accentGreen),
-                  const SizedBox(width: 12),
-                  _buildSubFilter('Annulées', color: const Color(0xFFE53935)),
-                ],
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColors.grey200, width: 1),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    _buildSubFilter('Tout'),
+                    const SizedBox(width: 16),
+                    _buildSubFilter('En cours', color: AppColors.primaryBlue),
+                    const SizedBox(width: 16),
+                    _buildSubFilter('Terminées', color: AppColors.accentGreen),
+                    const SizedBox(width: 16),
+                    _buildSubFilter('Annulées', color: const Color(0xFFE53935)),
+                  ],
+                ),
               ),
             ],
           ),
         ),
-        
+
         Expanded(
           child: Builder(
             builder: (context) {
               final rides = ref.watch(recentRidesProvider);
               return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 100),
                 itemCount: rides.length,
                 itemBuilder: (context, index) {
                   final ride = rides[index];
@@ -102,7 +107,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                   );
                 },
               );
-            }
+            },
           ),
         ),
       ],
@@ -138,32 +143,44 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
     final isSelected = _selectedFilter == label;
     return GestureDetector(
       onTap: () => setState(() => _selectedFilter = label),
-      child: Row(
-        children: [
-          if (color != null && !isSelected)
-            Container(
-              width: 4,
-              height: 4,
-              margin: const EdgeInsets.only(right: 4),
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
-            ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: isSelected ? AppColors.textPrimary : AppColors.textHint,
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: isSelected ? AppColors.textHint : Colors.transparent,
+              width: 2,
             ),
           ),
-        ],
+        ),
+        child: Row(
+          children: [
+            if (color != null)
+              Container(
+                width: 4,
+                height: 4,
+                margin: const EdgeInsets.only(right: 6),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              ),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected ? AppColors.textPrimary : AppColors.textHint,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildActivityItem({required RideModel ride, required String status, required Color statusColor}) {
+  Widget _buildActivityItem({
+    required RideModel ride,
+    required String status,
+    required Color statusColor,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.only(bottom: 16),
@@ -206,80 +223,97 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                   ),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '${ride.price.toInt()} F',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      status,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: statusColor,
-                      ),
-                    ),
-                  ),
-                ],
+              Text(
+                '${ride.price.toInt()} F',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                children: [
-                  Container(
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primaryBlue, width: 1.5),
-                    ),
-                  ),
-                  Container(
-                    width: 1,
-                    height: 16,
-                    color: AppColors.grey200,
-                  ),
-                  Container(
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.accentGreen, width: 1.5),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 8),
               Expanded(
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      ride.pickupLocation,
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    Column(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primaryBlue,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 16,
+                          color: AppColors.grey200,
+                        ),
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.accentGreen,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      ride.dropoffLocation,
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ride.pickupLocation,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            ride.dropoffLocation,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: statusColor,
+                  ),
                 ),
               ),
             ],
