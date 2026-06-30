@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:country_picker/country_picker.dart';
 import '../utils/app_colors.dart';
 import '../widgets/custom_numpad.dart';
 import 'otp_screen.dart';
@@ -14,8 +15,8 @@ class PhoneInputScreen extends StatefulWidget {
 
 class _PhoneInputScreenState extends State<PhoneInputScreen> {
   String _phoneNumber = '';
-  final String _countryCode = '+229';
-  final String _countryFlag = '🇧🇯';
+  String _countryCode = '+229';
+  String _countryFlag = '🇧🇯';
 
   @override
   void initState() {
@@ -211,18 +212,55 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
       ),
       child: Row(
         children: [
-          // Flag
-          Text(
-            _countryFlag,
-            style: const TextStyle(fontSize: 22),
-          ),
-          const SizedBox(width: 8),
-
-          // Dropdown arrow
-          const Icon(
-            Icons.keyboard_arrow_down_rounded,
-            size: 20,
-            color: AppColors.grey500,
+          // Flag & Dropdown
+          GestureDetector(
+            onTap: () {
+              showCountryPicker(
+                context: context,
+                showPhoneCode: true,
+                countryListTheme: CountryListThemeData(
+                  bottomSheetHeight: MediaQuery.of(context).size.height * 0.7,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  inputDecoration: InputDecoration(
+                    labelText: 'Rechercher un pays',
+                    hintText: 'Commencez à taper...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: AppColors.grey200,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                onSelect: (Country country) {
+                  setState(() {
+                    _countryCode = '+${country.phoneCode}';
+                    _countryFlag = country.flagEmoji;
+                  });
+                },
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                children: [
+                  Text(
+                    _countryFlag,
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 20,
+                    color: AppColors.grey500,
+                  ),
+                ],
+              ),
+            ),
           ),
 
           // Divider

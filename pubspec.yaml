@@ -75,6 +75,7 @@ dependencies:
   # Animations fluides et complexes
   flutter_animate: ^4.5.0
   smooth_page_indicator:
+  country_picker: ^2.0.28
 
 dev_dependencies:
   flutter_test:
