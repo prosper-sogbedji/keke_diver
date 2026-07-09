@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/driver_state_provider.dart';
 import '../../models/ride_model.dart';
@@ -21,24 +22,24 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+          padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 8.h),
           child: Column(
             children: [
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8.h),
+              Text(
                 'Activités récentes',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 4),
-              const Text(
+              SizedBox(height: 4.h),
+              Text(
                 'Consultez l\'historique de vos déplacements',
-                style: TextStyle(fontSize: 12, color: AppColors.textHint),
+                style: TextStyle(fontSize: 12.sp, color: AppColors.textHint),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Categories
               SingleChildScrollView(
@@ -46,33 +47,33 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                 child: Row(
                   children: [
                     _buildCategoryChip('Livraisons'),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     _buildCategoryChip('Achats'),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     _buildCategoryChip('Transports'),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     _buildCategoryChip('Covoiturages'),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Filters
               Container(
                 decoration: const BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: AppColors.grey200, width: 1),
+                    bottom: BorderSide(color: AppColors.grey200, width: 1.w),
                   ),
                 ),
                 child: Row(
                   children: [
                     _buildSubFilter('Tout'),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     _buildSubFilter('En cours', color: AppColors.primaryBlue),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     _buildSubFilter('Terminées', color: AppColors.accentGreen),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     _buildSubFilter('Annulées', color: const Color(0xFFE53935)),
                   ],
                 ),
@@ -86,7 +87,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
             builder: (context) {
               final rides = ref.watch(recentRidesProvider);
               return ListView.builder(
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 100),
+                padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 100.h),
                 itemCount: rides.length,
                 itemBuilder: (context, index) {
                   final ride = rides[index];
@@ -119,10 +120,10 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
     return GestureDetector(
       onTap: () => setState(() => _selectedCategory = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryBlue : AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isSelected ? AppColors.primaryBlue : AppColors.grey200,
           ),
@@ -131,7 +132,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
           label,
           style: TextStyle(
             color: isSelected ? AppColors.white : AppColors.textPrimary,
-            fontSize: 12,
+            fontSize: 12.sp,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -144,12 +145,12 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
     return GestureDetector(
       onTap: () => setState(() => _selectedFilter = label),
       child: Container(
-        padding: const EdgeInsets.only(bottom: 8),
+        padding: EdgeInsets.only(bottom: 8.h),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
               color: isSelected ? AppColors.textHint : Colors.transparent,
-              width: 2,
+              width: 2.w,
             ),
           ),
         ),
@@ -157,15 +158,15 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
           children: [
             if (color != null)
               Container(
-                width: 4,
-                height: 4,
-                margin: const EdgeInsets.only(right: 6),
+                width: 4.w,
+                height: 4.h,
+                margin: EdgeInsets.only(right: 6.w),
                 decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 color: isSelected ? AppColors.textPrimary : AppColors.textHint,
               ),
@@ -182,8 +183,8 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
     required Color statusColor,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.only(bottom: 16.h),
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.grey200)),
       ),
@@ -196,18 +197,18 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
               Row(
                 children: [
                   CircleAvatar(
-                    radius: 16,
+                    radius: 16.r,
                     backgroundColor: AppColors.grey200,
                     backgroundImage: NetworkImage(ride.clientImageUrl),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         ride.clientName,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: TextStyle(
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
                         ),
@@ -215,7 +216,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                       Text(
                         '${ride.date.hour}:${ride.date.minute.toString().padLeft(2, '0')} • N° ${ride.id.toUpperCase()}',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           color: AppColors.textHint.withValues(alpha: 0.8),
                         ),
                       ),
@@ -225,15 +226,15 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
               ),
               Text(
                 '${ride.price.toInt()} F',
-                style: const TextStyle(
-                  fontSize: 14,
+                style: TextStyle(
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -244,51 +245,51 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                     Column(
                       children: [
                         Container(
-                          width: 8,
-                          height: 8,
+                          width: 8.w,
+                          height: 8.h,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.primaryBlue,
-                              width: 2,
+                              width: 2.w,
                             ),
                           ),
                         ),
                         Container(
-                          width: 1,
-                          height: 16,
+                          width: 1.w,
+                          height: 16.h,
                           color: AppColors.grey200,
                         ),
                         Container(
-                          width: 8,
-                          height: 8,
+                          width: 8.w,
+                          height: 8.h,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.accentGreen,
-                              width: 2,
+                              width: 2.w,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             ride.pickupLocation,
-                            style: const TextStyle(
-                              fontSize: 11,
+                            style: TextStyle(
+                              fontSize: 11.sp,
                               color: AppColors.textPrimary,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           Text(
                             ride.dropoffLocation,
-                            style: const TextStyle(
-                              fontSize: 11,
+                            style: TextStyle(
+                              fontSize: 11.sp,
                               color: AppColors.textPrimary,
                             ),
                           ),
@@ -300,17 +301,17 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
+                  horizontal: 10.w,
+                  vertical: 6.h,
                 ),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
                   status,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
                     color: statusColor,
                   ),

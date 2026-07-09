@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 
 class RideFinishedScreen extends StatefulWidget {
@@ -29,49 +30,49 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Votre course est terminée !',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8.h),
+              Text(
                 'Comment était la course ? Donnez une note au client.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: AppColors.textHint,
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               
               // User info
               const CircleAvatar(
-                radius: 32,
+                radius: 32.r,
                 backgroundColor: AppColors.grey200,
                 backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=12'),
               ),
-              const SizedBox(height: 12),
-              const Text(
+              SizedBox(height: 12.h),
+              Text(
                 'Dieu-donné Y.',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const Text(
+              Text(
                 '14:50 • N° 77052807',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   color: AppColors.textHint,
                 ),
               ),
               
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               
               // Rating stars
               Row(
@@ -84,44 +85,47 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                       });
                     },
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 6),
-                      padding: const EdgeInsets.all(12),
+                      width: 52.w,
+                      height: 52.h,
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
                       decoration: BoxDecoration(
                         color: AppColors.grey50,
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(color: AppColors.grey200),
                       ),
-                      child: Icon(
-                        Icons.star,
-                        color: index < _selectedRating ? const Color(0xFFFFB800) : AppColors.grey200,
-                        size: 28,
+                      child: Center(
+                        child: Icon(
+                          Icons.star,
+                          color: index < _selectedRating ? const Color(0xFFFFB800) : AppColors.grey200,
+                          size: 28.sp,
+                        ),
                       ),
                     ),
                   );
                 }),
               ),
               
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               
               // Amount
-              const Text(
+              Text(
                 '5 200 F',
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const Text(
+              Text(
                 'Total à récupérer',
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   color: AppColors.textHint,
                 ),
               ),
               
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.h),
                 child: Divider(color: AppColors.grey200),
               ),
               
@@ -131,20 +135,20 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                 child: Text(
                   'Itinéraire',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               
               _buildItineraryRow('à 159m de F7', 'Adresse de départ', '15:32'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildItineraryRow('9C&M+F3M, Boulevard Steinmetz, Cotonou', 'Adresse de destination', '16:07'),
               
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.h),
                 child: Divider(color: AppColors.grey200),
               ),
               
@@ -152,10 +156,10 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Facture',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
@@ -167,10 +171,10 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Télécharger la facture',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryBlue,
                       ),
@@ -178,13 +182,13 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               
               _buildFactureRow('Montant', 'Tarif de la livraison', '2 850 F'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildFactureRow('Payé en espèces', '', '2 850 F', isBold: true),
               
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               
               // Bottom Buttons
               Row(
@@ -205,14 +209,14 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                         foregroundColor: AppColors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(26),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
                       ),
-                      child: const Text('Support client', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      child: Text('Support client', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
                   Expanded(
                     flex: 2,
                     child: ElevatedButton(
@@ -225,16 +229,16 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
                         foregroundColor: AppColors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(26),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
                       ),
-                      child: const Text('Confirmer', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      child: Text('Confirmer', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
             ],
           ),
         ),
@@ -253,17 +257,17 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 13,
+                style: TextStyle(
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 11,
+                style: TextStyle(
+                  fontSize: 11.sp,
                   color: AppColors.textHint,
                 ),
               ),
@@ -272,8 +276,8 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
         ),
         Text(
           time,
-          style: const TextStyle(
-            fontSize: 12,
+          style: TextStyle(
+            fontSize: 12.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
@@ -293,17 +297,17 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
             Text(
               title,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 13.sp,
                 fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
             if (subtitle.isNotEmpty) ...[
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 11,
+                style: TextStyle(
+                  fontSize: 11.sp,
                   color: AppColors.textHint,
                 ),
               ),
@@ -313,7 +317,7 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
         Text(
           amount,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
             color: AppColors.textPrimary,
           ),

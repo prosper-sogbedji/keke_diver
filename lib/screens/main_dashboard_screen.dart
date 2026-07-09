@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import 'ride_map_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,11 +48,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       decoration: const BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+          topLeft: Radius.circular(24.r),
+          topRight: Radius.circular(24.r),
         ),
       ),
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,32 +60,32 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           // Drag handle
           Center(
             child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 24),
+              width: 40.w,
+              height: 4.h,
+              margin: EdgeInsets.only(bottom: 24.h),
               decoration: BoxDecoration(
                 color: AppColors.grey200,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(2.r),
               ),
             ),
           ),
 
-          const Text(
+          Text(
             'Demandes de courses',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Request Card
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               color: AppColors.grey50,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               border: Border.all(color: AppColors.grey200),
             ),
             child: Column(
@@ -98,7 +99,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Stack(
                           children: [
                             const CircleAvatar(
-                              radius: 20,
+                              radius: 20.r,
                               backgroundColor: AppColors.grey200,
                               backgroundImage: NetworkImage(
                                 'https://i.pravatar.cc/100?img=11',
@@ -108,28 +109,28 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                               bottom: 0,
                               right: 0,
                               child: Container(
-                                width: 12,
-                                height: 12,
+                                width: 12.w,
+                                height: 12.h,
                                 decoration: BoxDecoration(
                                   color: AppColors.accentGreen,
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: AppColors.white,
-                                    width: 2,
+                                    width: 2.w,
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Codjo Igor Z.',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
@@ -137,7 +138,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                             Text(
                               '14:50 • N° 77052807',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 11.sp,
                                 color: AppColors.textHint,
                               ),
                             ),
@@ -160,14 +161,14 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         foregroundColor: AppColors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Accepter la course',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -175,39 +176,39 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 // Route timeline
                 Row(
                   children: [
                     Container(
-                      width: 12,
-                      height: 12,
+                      width: 12.w,
+                      height: 12.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.primaryBlue,
-                          width: 3,
+                          width: 3.w,
                         ),
                       ),
                     ),
                     Expanded(
-                      child: Container(height: 2, color: AppColors.grey200),
+                      child: Container(height: 2.h, color: AppColors.grey200),
                     ),
                     Container(
-                      width: 12,
-                      height: 12,
+                      width: 12.w,
+                      height: 12.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.accentGreen,
-                          width: 3,
+                          width: 3.w,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -217,7 +218,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Text(
                           'Gbegamey, Cotonou',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -225,15 +226,15 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Text(
                           'Départ à 5 min de vous',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
                       ],
                     ),
-                    const Icon(
+                    Icon(
                       Icons.arrow_forward_rounded,
-                      size: 16,
+                      size: 16.sp,
                       color: AppColors.grey400,
                     ),
                     const Column(
@@ -242,7 +243,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Text(
                           'Boulevard Steinmetz, Cotonou',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -250,7 +251,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Text(
                           'Arrivée',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
@@ -259,9 +260,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ],
                 ),
 
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Divider(color: AppColors.grey200, height: 1),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  child: Divider(color: AppColors.grey200, height: 1.h),
                 ),
 
                 // Stats row
@@ -274,58 +275,58 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Text(
                           'Tarif estimé',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '1 200F',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
                         ),
                       ],
                     ),
-                    Container(width: 1, height: 30, color: AppColors.grey200),
+                    Container(width: 1.w, height: 30.h, color: AppColors.grey200),
                     const Column(
                       children: [
                         Text(
                           'Distance',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '14,08 km',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
                         ),
                       ],
                     ),
-                    Container(width: 1, height: 30, color: AppColors.grey200),
+                    Container(width: 1.w, height: 30.h, color: AppColors.grey200),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           'Durée',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '≈1h20 min',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -338,32 +339,32 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           SizedBox(
-            height: 52,
+            height: 52.h,
             child: OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.textPrimary,
                 side: const BorderSide(color: Color(0xFF2B364A)),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(26),
+                  borderRadius: BorderRadius.circular(26.r),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'Ignorer la demande',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
               ),
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
-          const Text(
+          Text(
             'Cette demande disparaîtra automatiquement dans 4:59',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: AppColors.textHint),
+            style: TextStyle(fontSize: 12.sp, color: AppColors.textHint),
           ),
         ],
       ),
@@ -378,7 +379,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       body: SafeArea(bottom: false, child: _buildBody()),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+          padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 24.h),
           child: _buildBottomNavigationBar(),
         ),
       ),
@@ -420,7 +421,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           _buildContractCard(),
           _buildStatisticsSection(),
           _buildRecentActivities(),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
         ],
       ),
     );
@@ -430,16 +431,16 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     final user = ref.watch(userProvider);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+      padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 16.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             'assets/images/logo_blue.png',
-            height: 32,
+            height: 32.h,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
-              return const Icon(Icons.broken_image, color: AppColors.primaryBlue, size: 32);
+              return Icon(Icons.broken_image, color: AppColors.primaryBlue, size: 32.sp);
             },
           ),
           Row(
@@ -458,22 +459,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   children: [
                     const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.notifications_none_rounded, size: 28),
+                      child: Icon(Icons.notifications_none_rounded, size: 28.sp),
                     ),
                     Positioned(
                       right: 4,
                       top: 4,
                       child: Container(
-                        padding: const EdgeInsets.all(4),
+                        padding: EdgeInsets.all(4.w),
                         decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
-                        child: const Text(
+                        child: Text(
                           '2',
                           style: TextStyle(
                             color: AppColors.white,
-                            fontSize: 10,
+                            fontSize: 10.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -482,7 +483,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ],
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16.w),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -502,7 +503,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   );
                 },
                 child: CircleAvatar(
-                  radius: 20,
+                  radius: 20.r,
                   backgroundColor: AppColors.grey200,
                   backgroundImage: NetworkImage(user.profileImageUrl),
                 ),
@@ -517,12 +518,12 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   Widget _buildWalletCard() {
     final balance = ref.watch(walletBalanceProvider);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
           color: AppColors.primaryBlue,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24.r),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -530,16 +531,16 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Portefeuille',
-                  style: TextStyle(color: AppColors.white, fontSize: 12),
+                  style: TextStyle(color: AppColors.white, fontSize: 12.sp),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   '${balance.toInt()} FCFA',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.white,
-                    fontSize: 22,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -555,11 +556,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                     ),
                   );
                 }),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 _buildCardButton(Icons.upload_rounded, onTap: () {
                   setState(() => _currentIndex = 1);
                 }),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 _buildCardButton(Icons.history_rounded, onTap: () {
                   setState(() => _currentIndex = 3);
                 }),
@@ -575,13 +576,13 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: 40.w,
+        height: 40.h,
         decoration: const BoxDecoration(
           color: AppColors.white,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: AppColors.primaryBlue, size: 20),
+        child: Icon(icon, color: AppColors.primaryBlue, size: 20.sp),
       ),
     );
   }
@@ -591,7 +592,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     final user = ref.watch(userProvider);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+      padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -600,8 +601,8 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             children: [
               Text(
                 'Bon retour, ${user.firstName}',
-                style: const TextStyle(
-                  fontSize: 22,
+                style: TextStyle(
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -611,17 +612,17 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Text(
                     isActive ? 'Actif' : 'Inactif',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: isActive
                           ? AppColors.accentGreen
                           : AppColors.textHint,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   SizedBox(
-                    height: 24,
-                    width: 44,
+                    height: 24.h,
+                    width: 44.w,
                     child: Switch(
                       value: isActive,
                       onChanged: (val) {
@@ -637,10 +638,10 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8.h),
+          Text(
             'Bienvenue sur votre tableau de bord',
-            style: TextStyle(fontSize: 13, color: AppColors.textHint),
+            style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
           ),
         ],
       ),
@@ -649,24 +650,24 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildServicesToggle() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Choisissez le(s) service(s) à activer',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Container(
-            height: 44,
+            height: 44.h,
             decoration: BoxDecoration(
               color: AppColors.grey50,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(22.r),
             ),
             child: Row(
               children: [
@@ -694,13 +695,13 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: isSelected ? const Color(0xFF2B364A) : Colors.transparent,
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(22.r),
           ),
           child: Text(
             text,
             style: TextStyle(
               color: isSelected ? AppColors.white : AppColors.textHint,
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             ),
           ),
@@ -711,12 +712,12 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildActiveRideCard() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      padding: EdgeInsets.fromLTRB(24.w, 0.h, 24.w, 16.h),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: AppColors.grey50,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: AppColors.grey200),
         ),
         child: Column(
@@ -724,13 +725,13 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             Row(
               children: [
                 const CircleAvatar(
-                  radius: 20,
+                  radius: 20.r,
                   backgroundColor: AppColors.grey200,
                   backgroundImage: NetworkImage(
                     'https://i.pravatar.cc/100?img=11',
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -738,7 +739,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       Text(
                         'Codjo Igor Z.',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
                         ),
@@ -746,7 +747,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       Text(
                         '14:50 - N° 77052B07',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 11.sp,
                           color: AppColors.textHint,
                         ),
                       ),
@@ -755,57 +756,57 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                    horizontal: 12.w,
+                    vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.accentGreen.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
-                  child: const Text(
+                  child: Text(
                     'En cours',
                     style: TextStyle(
                       color: AppColors.accentGreen,
                       fontWeight: FontWeight.w600,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Column(
               children: [
                 Row(
                   children: [
                     Container(
-                      width: 12,
-                      height: 12,
+                      width: 12.w,
+                      height: 12.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.primaryBlue,
-                          width: 3,
+                          width: 3.w,
                         ),
                       ),
                     ),
                     Expanded(
-                      child: Container(height: 2, color: AppColors.primaryBlue),
+                      child: Container(height: 2.h, color: AppColors.primaryBlue),
                     ),
                     Container(
-                      width: 12,
-                      height: 12,
+                      width: 12.w,
+                      height: 12.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.accentGreen,
-                          width: 3,
+                          width: 3.w,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -816,17 +817,17 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                           Text(
                             'Gbegamey, Cotonou',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                           Text(
                             'Départ à 5 min de vous',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 11.sp,
                               color: AppColors.textHint,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -834,11 +835,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
                       child: Icon(
                         Icons.arrow_forward_rounded,
-                        size: 16,
+                        size: 16.sp,
                         color: AppColors.textHint,
                       ),
                     ),
@@ -849,17 +850,17 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                           Text(
                             'Boulevard Steinmetz, Cotonou',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                           Text(
                             'Arrivée',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 11.sp,
                               color: AppColors.textHint,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -871,9 +872,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              padding: EdgeInsets.symmetric(vertical: 12.h),
               decoration: const BoxDecoration(
                 border: Border(top: BorderSide(color: AppColors.grey200)),
               ),
@@ -885,15 +886,15 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         Text(
                           'Tarif estimé',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '1 200F',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -901,22 +902,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       ],
                     ),
                   ),
-                  Container(width: 1, height: 24, color: AppColors.grey200),
+                  Container(width: 1.w, height: 24.h, color: AppColors.grey200),
                   Expanded(
                     child: Column(
                       children: const [
                         Text(
                           'Distance',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '14,08 km',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -924,22 +925,22 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       ],
                     ),
                   ),
-                  Container(width: 1, height: 24, color: AppColors.grey200),
+                  Container(width: 1.w, height: 24.h, color: AppColors.grey200),
                   Expanded(
                     child: Column(
                       children: const [
                         Text(
                           'Durée',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '≈1h20 min',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -958,14 +959,14 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildEnginCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: AppColors.grey50,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+            topLeft: Radius.circular(16.r),
+            topRight: Radius.circular(16.r),
           ),
           border: Border.all(color: AppColors.grey200),
         ),
@@ -973,16 +974,16 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           children: [
             // Vehicle Circle image
             Container(
-              width: 48,
-              height: 48,
+              width: 48.w,
+              height: 48.h,
               decoration: const BoxDecoration(
                 color: AppColors.white,
                 shape: BoxShape.circle,
               ),
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8.w),
               child: Image.asset('assets/images/moto.png', fit: BoxFit.contain),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -990,7 +991,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Text(
                     'Votre engin',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
@@ -1001,7 +1002,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         child: Text(
                           'BAJAJ 125 - TG 4585 DG',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: AppColors.textHint,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -1009,7 +1010,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       ),
                       Icon(
                         Icons.chevron_right_rounded,
-                        size: 16,
+                        size: 16.sp,
                         color: AppColors.textHint,
                       ),
                     ],
@@ -1024,11 +1025,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 foregroundColor: AppColors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
               ),
-              child: const Text('Covoiturage', style: TextStyle(fontSize: 12)),
+              child: Text('Covoiturage', style: TextStyle(fontSize: 12.sp)),
             ),
           ],
         ),
@@ -1038,14 +1039,14 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildContractCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(16),
+            bottomLeft: Radius.circular(16.r),
+            bottomRight: Radius.circular(16.r),
           ),
           border: Border(
             left: BorderSide(color: AppColors.grey200),
@@ -1061,13 +1062,13 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               children: [
                 Text(
                   'Type de contrat',
-                  style: TextStyle(fontSize: 12, color: AppColors.textHint),
+                  style: TextStyle(fontSize: 12.sp, color: AppColors.textHint),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   'Propriétaire indépendant',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -1075,23 +1076,23 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ],
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
                 color: AppColors.accentGreen.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.verified_outlined,
-                    size: 14,
+                    size: 14.sp,
                     color: AppColors.accentGreen,
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                   Text(
                     'À jour',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.accentGreen,
                     ),
@@ -1107,46 +1108,46 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildStatisticsSection() {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.w),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Statistiques',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
+                  horizontal: 12.w,
+                  vertical: 4.h,
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.grey200),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: const Row(
                   children: [
                     Text(
                       'Aujourd\'hui',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         color: AppColors.textPrimary,
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.keyboard_arrow_down_rounded, size: 16),
+                    SizedBox(width: 4.w),
+                    Icon(Icons.keyboard_arrow_down_rounded, size: 16.sp),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Row(
             children: [
               Expanded(
@@ -1160,7 +1161,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   iconColor: AppColors.white,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: _buildStatCard(
                   icon: Icons.payments_outlined,
@@ -1174,7 +1175,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Row(
             children: [
               Expanded(
@@ -1190,7 +1191,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   onTap: () => setState(() => _currentIndex = 2),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: _buildStatCard(
                   icon: Icons.star_border_rounded,
@@ -1225,10 +1226,10 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1237,26 +1238,26 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(6),
+                  padding: EdgeInsets.all(6.w),
                   decoration: BoxDecoration(
                     color: iconBgColor,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
-                  child: Icon(icon, size: 16, color: iconColor),
+                  child: Icon(icon, size: 16.sp, color: iconColor),
                 ),
                 if (showArrow)
                   Icon(
                     Icons.chevron_right_rounded,
                     color: textColor.withValues(alpha: 0.7),
-                    size: 18,
+                    size: 18.sp,
                   ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Text(
               title,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 color: textColor,
               ),
@@ -1264,7 +1265,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             Text(
               subtitle,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 11.sp,
                 color: textColor.withValues(alpha: 0.8),
               ),
             ),
@@ -1278,17 +1279,17 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     final recentRides = ref.watch(recentRidesProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Dernières activités',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -1300,14 +1301,14 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                     Text(
                       'Tout voir',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryBlue,
                       ),
                     ),
                     Icon(
                       Icons.chevron_right_rounded,
-                      size: 16,
+                      size: 16.sp,
                       color: AppColors.primaryBlue,
                     ),
                   ],
@@ -1315,17 +1316,17 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           ...recentRides.map(
             (ride) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16.h),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Stack(
                     children: [
                       CircleAvatar(
-                        radius: 18,
+                        radius: 18.r,
                         backgroundColor: AppColors.grey200,
                         backgroundImage: NetworkImage(ride.clientImageUrl),
                       ),
@@ -1334,37 +1335,37 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            width: 10,
-                            height: 10,
+                            width: 10.w,
+                            height: 10.h,
                             decoration: BoxDecoration(
                               color: AppColors.accentGreen,
                               shape: BoxShape.circle,
                               border: Border.all(
                                 color: AppColors.white,
-                                width: 2,
+                                width: 2.w,
                               ),
                             ),
                           ),
                         ),
                     ],
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           ride.clientName,
-                          style: const TextStyle(
-                            fontSize: 13,
+                          style: TextStyle(
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
                           ),
                         ),
                         Text(
                           '${ride.date.hour}:${ride.date.minute.toString().padLeft(2, '0')} • N° ${ride.id.toUpperCase()}',
-                          style: const TextStyle(
-                            fontSize: 11,
+                          style: TextStyle(
+                            fontSize: 11.sp,
                             color: AppColors.textHint,
                           ),
                         ),
@@ -1373,8 +1374,8 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ),
                   Text(
                     '${ride.price.toInt()} F',
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: TextStyle(
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
@@ -1390,11 +1391,12 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildBottomNavigationBar() {
     return Container(
+      height: 56.h,
       decoration: BoxDecoration(
         color: const Color(0xFF2B364A),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(40.r),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -1412,28 +1414,32 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     final isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: isSelected
-                ? AppColors.white
-                : AppColors.textHint.withValues(alpha: 0.5),
-            size: 24,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
               color: isSelected
                   ? AppColors.white
                   : AppColors.textHint.withValues(alpha: 0.5),
+              size: 22.sp,
             ),
-          ),
-        ],
+            SizedBox(height: 4.h),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10.sp,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                color: isSelected
+                    ? AppColors.white
+                    : AppColors.textHint.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

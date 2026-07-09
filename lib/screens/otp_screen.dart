@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import '../widgets/custom_numpad.dart';
 import 'profile_screen.dart';
@@ -76,13 +77,16 @@ class _OtpScreenState extends State<OtpScreen> {
               const ProfileScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutCubic,
-              )),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
               child: child,
             );
           },
@@ -111,101 +115,98 @@ class _OtpScreenState extends State<OtpScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 16),
+                    SizedBox(height: 75.h),
 
                     // Illustration
                     SizedBox(
-                      height: 180,
-                      child: Image.asset(
-                        'assets/images/auth_otp.png',
-                        fit: BoxFit.contain,
-                      ),
-                    )
+                          height: 180.h,
+                          child: Image.asset(
+                            'assets/images/auth_otp.png',
+                            fit: BoxFit.contain,
+                          ),
+                        )
                         .animate()
                         .fadeIn(duration: 500.ms)
                         .slideY(begin: -0.1, end: 0, duration: 500.ms),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 45.h),
 
                     // Title
-                    const Text(
+                    Text(
                       'Code de vérification',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
                         letterSpacing: -0.3,
                       ),
-                    )
-                        .animate()
-                        .fadeIn(duration: 400.ms, delay: 150.ms),
+                    ).animate().fadeIn(duration: 400.ms, delay: 150.ms),
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
 
                     // Subtitle with phone number
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      padding: EdgeInsets.symmetric(horizontal: 40.w),
                       child: Text(
                         'Entrez le code à $_codeLength chiffres que nous avons envoyé\nau ${widget.phoneNumber}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: TextStyle(
+                          fontSize: 13.sp,
                           color: AppColors.textHint,
                           height: 1.5,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    SizedBox(height: 10.h),
 
                     // OTP boxes
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 48.h,
                         child: _buildOtpBoxes(),
-                      ),
-                    )
-                        .animate()
-                        .fadeIn(duration: 400.ms, delay: 250.ms),
+                      ).animate().fadeIn(duration: 400.ms, delay: 250.ms),
+                    ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 12.h),
 
                     // Resend row
                     _buildResendRow(),
-
-                    const SizedBox(height: 20),
-
-                    // Validate button
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: ElevatedButton(
-                          onPressed: _code.length == _codeLength ? _onValidate : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryBlue,
-                            foregroundColor: AppColors.white,
-                            disabledBackgroundColor: AppColors.primaryBlue.withValues(alpha: 0.4),
-                            disabledForegroundColor: AppColors.white.withValues(alpha: 0.7),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
-                            ),
-                            textStyle: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          child: const Text('Valider le code'),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
                   ],
+                ),
+              ),
+            ),
+
+            // Bouton ancré au-dessus du clavier (même position que "Continuer")
+            Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
+              child: SizedBox(
+                width: double.infinity,
+                height: 48.h,
+                child: ElevatedButton(
+                  onPressed: _code.length == _codeLength ? _onValidate : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF003AB9),
+                    foregroundColor: AppColors.white,
+                    disabledBackgroundColor: const Color(
+                      0xFF003AB9,
+                    ).withValues(alpha: 0.4),
+                    disabledForegroundColor: AppColors.white.withValues(
+                      alpha: 0.7,
+                    ),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    textStyle: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: const Text('Valider le code'),
                 ),
               ),
             ),
@@ -223,49 +224,51 @@ class _OtpScreenState extends State<OtpScreen> {
 
   Widget _buildOtpBoxes() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(_codeLength, (index) {
         final hasValue = index < _code.length;
         final isActive = index == _code.length;
 
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          width: 50,
-          height: 56,
-          margin: EdgeInsets.only(right: index < _codeLength - 1 ? 10 : 0),
-          decoration: BoxDecoration(
-            color: hasValue
-                ? AppColors.primaryBlue.withValues(alpha: 0.06)
-                : AppColors.grey50,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isActive
-                  ? AppColors.primaryBlue
-                  : hasValue
+        return Expanded(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 6.w),
+
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              height: 48.h,
+              decoration: BoxDecoration(
+                color: hasValue
+                    ? AppColors.primaryBlue.withValues(alpha: 0.06)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(
+                  color: isActive
+                      ? AppColors.primaryBlue
+                      : hasValue
                       ? AppColors.primaryBlue.withValues(alpha: 0.3)
                       : AppColors.grey200,
-              width: isActive ? 2 : 1,
+                  width: isActive ? 2.w : 1.w,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: hasValue
+                  ? Text(
+                      _code[index],
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ).animate().scale(
+                      begin: const Offset(0.5, 0.5),
+                      end: const Offset(1.0, 1.0),
+                      duration: 200.ms,
+                      curve: Curves.elasticOut,
+                    )
+                  : null,
             ),
           ),
-          alignment: Alignment.center,
-          child: hasValue
-              ? Text(
-                  _code[index],
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                )
-                  .animate()
-                  .scale(
-                    begin: const Offset(0.5, 0.5),
-                    end: const Offset(1.0, 1.0),
-                    duration: 200.ms,
-                    curve: Curves.elasticOut,
-                  )
-              : null,
         );
       }),
     );
@@ -277,21 +280,16 @@ class _OtpScreenState extends State<OtpScreen> {
       children: [
         Text(
           "Vous n'avez pas reçu le code ? ",
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.textHint,
-          ),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.textHint),
         ),
         GestureDetector(
           onTap: _canResend ? _onResend : null,
           child: Text(
             _canResend ? 'Renvoyer' : 'Renvoyer (${_resendCountdown}s)',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w600,
-              color: _canResend
-                  ? AppColors.primaryBlue
-                  : AppColors.textHint,
+              color: _canResend ? AppColors.primaryBlue : AppColors.textHint,
               decoration: _canResend ? TextDecoration.underline : null,
               decorationColor: AppColors.primaryBlue,
             ),

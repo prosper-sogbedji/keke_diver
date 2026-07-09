@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import '../utils/app_colors.dart';
 import 'chat_screen.dart';
@@ -66,10 +67,10 @@ class _RideMapScreenState extends State<RideMapScreen> {
         children: [
           // Simulated Map Background
           Positioned.fill(
-            child: Image.network(
-              'https://static.vecteezy.com/system/resources/previews/001/888/443/large_2x/city-map-with-pins-vector.jpg',
+            child: Image.asset(
+              'assets/images/map_bg.png',
               fit: BoxFit.cover,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: Colors.white.withValues(alpha: 0.6),
               colorBlendMode: BlendMode.lighten,
             ),
           ),
@@ -124,8 +125,8 @@ class _RideMapScreenState extends State<RideMapScreen> {
       decoration: BoxDecoration(
         color: headerColor,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+          topLeft: Radius.circular(24.r),
+          topRight: Radius.circular(24.r),
         ),
       ),
       child: Column(
@@ -135,19 +136,29 @@ class _RideMapScreenState extends State<RideMapScreen> {
           // Drag handle
           Center(
             child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(top: 12, bottom: 12),
+              width: 40.w,
+              height: 4.h,
+              margin: EdgeInsets.only(top: 12.h, bottom: 12.h),
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(2.r),
               ),
             ),
           ),
           
-          // Header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          // Header with GestureDetector for prototype state transition
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                if (_currentState == RideState.enRouteToPickup) {
+                  _currentState = RideState.arrivedAtPickup;
+                } else if (_currentState == RideState.arrivedAtPickup) {
+                  _currentState = RideState.enRouteToDestination;
+                }
+              });
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -156,9 +167,9 @@ class _RideMapScreenState extends State<RideMapScreen> {
                     isEnRouteToPickup ? 'Rendez-vous au point de départ !' 
                     : isArrived ? 'Vous êtes arrivé au lieu de départ'
                     : 'Vous êtes en route pour votre destination',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.white,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -167,54 +178,56 @@ class _RideMapScreenState extends State<RideMapScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: const Text(
                           '+0F',
                           style: TextStyle(
                             color: Color(0xFFE53935),
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         '-$_formattedTime',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.white,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   )
                 else
-                  const Text(
+                  Text(
                     '19:32',
                     style: TextStyle(
                       color: AppColors.white,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
               ],
             ),
           ),
+          ),
           
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           
           // White Card Content
           Container(
-            padding: const EdgeInsets.all(24),
+            height: 390.h,
+            padding: EdgeInsets.all(24.w),
             decoration: const BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
+                topLeft: Radius.circular(24.r),
+                topRight: Radius.circular(24.r),
               ),
             ),
             child: Column(
@@ -225,7 +238,7 @@ class _RideMapScreenState extends State<RideMapScreen> {
                     Stack(
                       children: [
                         const CircleAvatar(
-                          radius: 24,
+                          radius: 24.r,
                           backgroundColor: AppColors.grey200,
                           backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=12'),
                         ),
@@ -233,18 +246,18 @@ class _RideMapScreenState extends State<RideMapScreen> {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            width: 14,
-                            height: 14,
+                            width: 14.w,
+                            height: 14.h,
                             decoration: BoxDecoration(
                               color: AppColors.accentGreen,
                               shape: BoxShape.circle,
-                              border: Border.all(color: AppColors.white, width: 2),
+                              border: Border.all(color: AppColors.white, width: 2.w),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +265,7 @@ class _RideMapScreenState extends State<RideMapScreen> {
                           Text(
                             'Dieu-donné Y.',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
                             ),
@@ -260,39 +273,41 @@ class _RideMapScreenState extends State<RideMapScreen> {
                           Text(
                             '14:50 • N° 77052807',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 11.sp,
                               color: AppColors.textHint,
                             ),
                           ),
                           Row(
                             children: [
-                              Icon(Icons.star, color: Color(0xFFFFB800), size: 14),
-                              SizedBox(width: 4),
-                              Text('4.93', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                              Icon(Icons.star, color: Color(0xFFFFB800), size: 14.sp),
+                              SizedBox(width: 4.w),
+                              Text('4.93', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ],
                       ),
                     ),
                     _buildCircleButton(Icons.phone, () {}),
-                    const SizedBox(width: 12),
-                    _buildCircleButton(Icons.chat_bubble_outline_rounded, () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const ChatScreen()),
+                    SizedBox(width: 12.w),
+                    _buildCircleButton(Icons.chat_bubble_outline, () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => const ChatScreen(),
                       );
                     }),
                   ],
                 ),
                 
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 
                 // Route Info Container
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16.w),
                   decoration: BoxDecoration(
                     color: AppColors.grey50,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
                   child: Column(
                     children: [
@@ -302,41 +317,41 @@ class _RideMapScreenState extends State<RideMapScreen> {
                           Column(
                             children: [
                               Container(
-                                width: 12,
-                                height: 12,
+                                width: 12.w,
+                                height: 12.h,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.primaryBlue, width: 3),
+                                  border: Border.all(color: AppColors.primaryBlue, width: 3.w),
                                 ),
                               ),
                               Container(
-                                width: 2,
-                                height: 30,
+                                width: 2.w,
+                                height: 30.h,
                                 color: AppColors.grey200,
                               ),
                               Container(
-                                width: 12,
-                                height: 12,
+                                width: 12.w,
+                                height: 12.h,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.accentGreen, width: 3),
+                                  border: Border.all(color: AppColors.accentGreen, width: 3.w),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(width: 16),
+                          SizedBox(width: 16.w),
                           const Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Adresse de départ', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
-                                Text('à 159m de F7', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                                Text('Adresse de départ', style: TextStyle(fontSize: 11.sp, color: AppColors.textHint)),
+                                Text('à 159m de F7', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Divider(color: AppColors.grey200, height: 1),
+                                  child: Divider(color: AppColors.grey200, height: 1.h),
                                 ),
-                                Text('Destination', style: TextStyle(fontSize: 11, color: AppColors.textHint)),
-                                Text('9C&M+F3M, Boulevard Steinmetz, Cotonou', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                                Text('Destination', style: TextStyle(fontSize: 11.sp, color: AppColors.textHint)),
+                                Text('9C&M+F3M, Boulevard Steinmetz, Cotonou', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                               ],
                             ),
                           ),
@@ -346,31 +361,31 @@ class _RideMapScreenState extends State<RideMapScreen> {
                   ),
                 ),
                 
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 
                 // Price detail
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   decoration: BoxDecoration(
                     color: AppColors.grey50,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.local_offer_outlined, size: 18, color: AppColors.primaryBlue),
-                      SizedBox(width: 12),
+                      Icon(Icons.local_offer_outlined, size: 18.sp, color: AppColors.primaryBlue),
+                      SizedBox(width: 12.w),
                       Expanded(
                         child: Text(
                           'Détails du tarif - Paiement en espèces',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+                          style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
                         ),
                       ),
-                      Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.grey400),
+                      Icon(Icons.chevron_right_rounded, size: 20.sp, color: AppColors.grey400),
                     ],
                   ),
                 ),
                 
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 
                 // Action Buttons based on state
                 if (isEnRouteToPickup)
@@ -384,14 +399,14 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             foregroundColor: AppColors.textPrimary,
                             side: const BorderSide(color: Color(0xFF2B364A)),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
+                              borderRadius: BorderRadius.circular(20.r),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                           ),
-                          child: const Text('Annuler', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          child: Text('Annuler', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16.w),
                       Expanded(
                         flex: 2,
                         child: ElevatedButton(
@@ -406,13 +421,13 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             foregroundColor: AppColors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
+                              borderRadius: BorderRadius.circular(20.r),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                           ),
                           child: const FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text('Je suis arrivé', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                            child: Text('Je suis arrivé', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                           ),
                         ),
                       ),
@@ -422,50 +437,20 @@ class _RideMapScreenState extends State<RideMapScreen> {
                   Row(
                     children: [
                       Expanded(
-                        flex: 1,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Support en cours de développement'),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          },
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.textPrimary,
-                            side: const BorderSide(color: Color(0xFF2B364A)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: const Text('Support', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        flex: 2,
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              _currentState = RideState.enRouteToDestination;
-                            });
-                            _timer?.cancel();
+                            // Support action
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryBlue,
+                            backgroundColor: const Color(0xFF2B364A),
                             foregroundColor: AppColors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
+                              borderRadius: BorderRadius.circular(20.r),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                           ),
-                          child: const FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text('Commencer la course', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                          ),
+                          child: Text('Contacter le support client', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                         ),
                       ),
                     ],
@@ -481,14 +466,14 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             foregroundColor: AppColors.textPrimary,
                             side: const BorderSide(color: Color(0xFF2B364A)),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
+                              borderRadius: BorderRadius.circular(20.r),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                           ),
-                          child: const Text('Pause', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          child: Text('Pause', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16.w),
                       Expanded(
                         flex: 2,
                         child: ElevatedButton(
@@ -503,13 +488,13 @@ class _RideMapScreenState extends State<RideMapScreen> {
                             foregroundColor: AppColors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(26),
+                              borderRadius: BorderRadius.circular(20.r),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                           ),
                           child: const FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text('Terminer la course', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                            child: Text('Terminer la course', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                           ),
                         ),
                       ),
@@ -527,13 +512,13 @@ class _RideMapScreenState extends State<RideMapScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 44,
-        height: 44,
+        width: 44.w,
+        height: 44.h,
         decoration: const BoxDecoration(
           color: AppColors.primaryBlue,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: AppColors.white, size: 20),
+        child: Icon(icon, color: AppColors.white, size: 20.sp),
       ),
     );
   }
@@ -551,12 +536,10 @@ class _MockRoutePainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     final path = Path();
-    path.moveTo(size.width * 0.4, size.height * 0.4);
-    path.lineTo(size.width * 0.6, size.height * 0.4);
-    path.lineTo(size.width * 0.6, size.height * 0.35);
-    path.lineTo(size.width * 0.7, size.height * 0.35);
-    path.lineTo(size.width * 0.75, size.height * 0.25);
-    path.lineTo(size.width * 0.85, size.height * 0.23);
+    path.moveTo(size.width * 0.3, size.height * 0.45);
+    path.lineTo(size.width * 0.6, size.height * 0.38);
+    path.lineTo(size.width * 0.55, size.height * 0.25);
+    path.lineTo(size.width * 0.85, size.height * 0.15);
 
     canvas.drawPath(path, paint);
 
@@ -572,16 +555,16 @@ class _MockRoutePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
-    canvas.drawCircle(Offset(size.width * 0.4, size.height * 0.4), 6, nodePaint);
-    canvas.drawCircle(Offset(size.width * 0.4, size.height * 0.4), 6, startPaint);
+    canvas.drawCircle(Offset(size.width * 0.3, size.height * 0.45), 6, nodePaint);
+    canvas.drawCircle(Offset(size.width * 0.3, size.height * 0.45), 6, startPaint);
 
-    canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.23), 6, nodePaint);
-    canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.23), 6, strokePaint);
+    canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.15), 6, nodePaint);
+    canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.15), 6, strokePaint);
     
     // Draw current location circle
     final currentLocPaint = Paint()..color = AppColors.primaryBlue.withValues(alpha: 0.2);
-    canvas.drawCircle(Offset(size.width * 0.7, size.height * 0.35), 20, currentLocPaint);
-    canvas.drawCircle(Offset(size.width * 0.7, size.height * 0.35), 6, Paint()..color = AppColors.primaryBlue);
+    canvas.drawCircle(Offset(size.width * 0.6, size.height * 0.38), 20, currentLocPaint);
+    canvas.drawCircle(Offset(size.width * 0.6, size.height * 0.38), 6, Paint()..color = AppColors.primaryBlue);
   }
 
   @override

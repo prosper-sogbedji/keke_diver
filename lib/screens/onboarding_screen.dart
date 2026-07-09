@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import '../widgets/green_wave_painter.dart';
 import 'phone_input_screen.dart';
@@ -66,6 +67,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+  void _onPrevPressed() {
+    if (_currentPage > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
+
   void _onContinuePressed() {
     _navigateToNext();
   }
@@ -123,90 +133,145 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildBottomSection() {
+    final bool showBack = _currentPage > 0;
+    final bool showLast = _currentPage == _pages.length - 1;
+
     return Container(
-      color: AppColors.white,
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.r),
+          topRight: Radius.circular(30.r),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 24.h),
+
           // Page indicator dots
           SmoothPageIndicator(
             controller: _pageController,
             count: _pages.length,
-            effect: const ExpandingDotsEffect(
+            effect: ExpandingDotsEffect(
               activeDotColor: AppColors.primaryBlue,
               dotColor: AppColors.grey200,
-              dotHeight: 8,
-              dotWidth: 8,
+              dotHeight: 8.w,
+              dotWidth: 8.w,
               expansionFactor: 2.5,
-              spacing: 6,
+              spacing: 6.w,
             ),
           ),
 
-          const SizedBox(height: 32),
+          SizedBox(height: 24.h),
 
-          // Buttons row
-          Row(
-            children: [
-              // "Continuer" button
-              Expanded(
-                child: SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _onContinuePressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
-                      foregroundColor: AppColors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
+          // ── Boutons (adaptatifs, jamais de débordement) ─────────────
+          // Layout : [Retour 48] [14] [Continuer Expanded] [14] [Suivant 48]
+          // Retour et Suivant gardent leur place (maintainSize) → Continuer
+          // garde la même taille sur toutes les pages, quel que soit l'écran.
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Row(
+              children: [
+                // ── Bouton RETOUR (caché page 1, espace réservé) ──────────
+                Visibility(
+                  visible: showBack,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: SizedBox(
+                    width: 48.w,
+                    height: 48.w,
+                    child: ElevatedButton(
+                      onPressed: _onPrevPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF003AB9),
+                        foregroundColor: AppColors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        padding: EdgeInsets.zero,
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.3,
+                      child: Icon(
+                        Icons.chevron_left_rounded,
+                        size: 22.sp,
+                        color: AppColors.white,
                       ),
                     ),
-                    child: const Text('Continuer'),
                   ),
                 ),
-              ),
 
-              const SizedBox(width: 12),
+                SizedBox(width: 14.w),
 
-              // Arrow circle button
-              SizedBox(
-                width: 56,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _onNextPressed,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkCircle,
-                    foregroundColor: AppColors.white,
-                    elevation: 0,
-                    shape: const CircleBorder(),
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: const Icon(
-                    Icons.double_arrow_rounded,
-                    size: 24,
-                    color: AppColors.white,
+                // ── Bouton CONTINUER (Expanded = s'adapte à l'écran) ──────
+                Expanded(
+                  child: SizedBox(
+                    height: 48.w, // garder aligné avec la hauteur des autres boutons
+                    child: ElevatedButton(
+                      onPressed: _onContinuePressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF003AB9),
+                        foregroundColor: AppColors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        textStyle: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      child: const Text('Continuer'),
+                    ),
                   ),
                 ),
-              ),
-            ],
+
+                SizedBox(width: 14.w),
+
+                // ── Bouton SUIVANT (caché dernière page, espace réservé) ──
+                Visibility(
+                  visible: !showLast,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: SizedBox(
+                    width: 48.w,
+                    height: 48.w,
+                    child: ElevatedButton(
+                      onPressed: _onNextPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF313642),
+                        foregroundColor: AppColors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Icon(
+                        Icons.keyboard_double_arrow_right_rounded,
+                        size: 22.sp,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 20.h),
 
           // Terms text
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Text.rich(
               TextSpan(
                 text: "L'adhésion à notre application signifie que vous acceptez\nnos ",
-                style: const TextStyle(
-                  fontSize: 11,
+                style: TextStyle(
+                  fontSize: 11.sp,
                   color: AppColors.textHint,
                   height: 1.5,
                 ),
@@ -217,7 +282,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
                       decoration: TextDecoration.underline,
-                      decorationColor: AppColors.textSecondary.withValues(alpha: 0.4),
+                      decorationColor:
+                          AppColors.textSecondary.withValues(alpha: 0.4),
                     ),
                   ),
                   const TextSpan(text: " et notre "),
@@ -227,7 +293,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
                       decoration: TextDecoration.underline,
-                      decorationColor: AppColors.textSecondary.withValues(alpha: 0.4),
+                      decorationColor:
+                          AppColors.textSecondary.withValues(alpha: 0.4),
                     ),
                   ),
                 ],
@@ -236,7 +303,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          const SizedBox(height: 8),
+          // Espace bas : marge visible sur la maquette + barre de navigation système
+          Builder(
+            builder: (context) {
+              final bottomInset = MediaQuery.of(context).padding.bottom;
+              return SizedBox(height: bottomInset > 0 ? bottomInset + 8.h : 24.h);
+            },
+          ),
         ],
       ),
     );
@@ -257,7 +330,8 @@ class _OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final imageHeight = screenHeight * 0.52;
+    // Conteneur blanc = 341px (Figma), image prend le reste + 30px de chevauchement
+    final imageHeight = screenHeight - 341.h + 30.h;
 
     return Column(
       children: [
@@ -270,9 +344,9 @@ class _OnboardingPage extends StatelessWidget {
             children: [
               // Background image
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(32),
-                  bottomRight: Radius.circular(32),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30.r),
+                  bottomRight: Radius.circular(30.r),
                 ),
                 child: Image.asset(
                   data.image,
@@ -283,9 +357,9 @@ class _OnboardingPage extends StatelessWidget {
               // Green wave overlay
               Positioned.fill(
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(32),
-                    bottomRight: Radius.circular(32),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30.r),
+                    bottomRight: Radius.circular(30.r),
                   ),
                   child: CustomPaint(
                     painter: GreenWavePainter(variant: data.waveVariant),
@@ -299,12 +373,12 @@ class _OnboardingPage extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: Container(
-                  height: 30,
-                  decoration: const BoxDecoration(
+                  height: 30.h,
+                  decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
+                      topLeft: Radius.circular(30.r),
+                      topRight: Radius.circular(30.r),
                     ),
                   ),
                 ),
@@ -316,7 +390,7 @@ class _OnboardingPage extends StatelessWidget {
         // Text content section
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -324,8 +398,8 @@ class _OnboardingPage extends StatelessWidget {
                 Text(
                   data.title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
+                  style: TextStyle(
+                    fontSize: 24.sp,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
                     height: 1.3,
@@ -346,14 +420,14 @@ class _OnboardingPage extends StatelessWidget {
                       curve: Curves.easeOut,
                     ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
 
                 // Subtitle
                 Text(
                   data.subtitle,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: TextStyle(
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textHint,
                     height: 1.4,

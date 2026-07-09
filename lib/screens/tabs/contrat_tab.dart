@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../utils/app_colors.dart';
 import '../client_details_screen.dart';
 
@@ -13,71 +14,85 @@ class _ContratTabState extends State<ContratTab> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 100),
+      padding: EdgeInsets.only(bottom: 100.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+          padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 16.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Votre contrat',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 4),
-              const Text(
+              SizedBox(height: 4.h),
+              Text(
                 'Consultez les détails de votre contrat et de vos paiements',
-                style: TextStyle(fontSize: 12, color: AppColors.textHint),
+                style: TextStyle(fontSize: 12.sp, color: AppColors.textHint),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Status Banner
               Container(
+                height: 80.h,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+                  horizontal: 16.w,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.accentGreen,
-                  borderRadius: BorderRadius.circular(16),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF59B900), Color(0xFF2F5010)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.check,
-                              color: AppColors.white,
-                              size: 14,
-                            ),
-                            const SizedBox(width: 4),
-                            const Text(
-                              'Actif',
-                              style: TextStyle(
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF73C92B), // Light green pill background
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.check,
                                 color: AppColors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                size: 14.sp,
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 4.w),
+                              Text(
+                                'Actif',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
+                        SizedBox(height: 8.h),
+                        Text(
                           'Du 25 Fev. 2026 au 25 Aoû. 2026',
                           style: TextStyle(
                             color: AppColors.white,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                           ),
                         ),
                       ],
@@ -95,7 +110,7 @@ class _ContratTabState extends State<ContratTab> {
                           },
                           child: _buildCircleButton(Icons.remove_red_eye_outlined),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         GestureDetector(
                           onTap: () {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -113,7 +128,7 @@ class _ContratTabState extends State<ContratTab> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Statistics
               const Align(
@@ -121,57 +136,33 @@ class _ContratTabState extends State<ContratTab> {
                 child: Text(
                   'Statistiques',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               Row(
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      icon: Icons.info_outline,
+                      icon: Icons.info_outline_rounded,
                       title: '6 000 F',
                       subtitle: 'À payer demain',
-                      bgColor: const Color(0xFFE53935),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFE4455E), Color(0xFF810619)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
                       textColor: AppColors.white,
-                      iconColor: const Color(0xFFE53935),
+                      iconColor: const Color(0xFFB91D34),
                       iconBgColor: AppColors.white,
                       showArrow: true,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildStatCard(
-                      icon: Icons.account_balance_wallet_outlined,
-                      title: '25 %',
-                      subtitle: 'Total payé',
-                      bgColor: AppColors.grey50,
-                      textColor: AppColors.textPrimary,
-                      iconColor: AppColors.textPrimary,
-                      iconBgColor: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildStatCard(
-                      icon: Icons.pie_chart_outline,
-                      title: '75 %',
-                      subtitle: 'Reste à payer',
-                      bgColor: AppColors.grey50,
-                      textColor: AppColors.textPrimary,
-                      iconColor: AppColors.textPrimary,
-                      iconBgColor: AppColors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   Expanded(
                     child: _buildStatCard(
                       icon: Icons.check_circle_outline,
@@ -179,53 +170,142 @@ class _ContratTabState extends State<ContratTab> {
                       subtitle: 'Bénéfice actuel',
                       bgColor: AppColors.grey50,
                       textColor: AppColors.textPrimary,
-                      iconColor: AppColors.textPrimary,
-                      iconBgColor: AppColors.white,
+                      iconColor: AppColors.white,
+                      iconBgColor: const Color(0xFF2B364A),
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 24.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.money, size: 14.sp, color: AppColors.textHint),
+                      SizedBox(width: 4.w),
+                      Text(
+                        'Évolution de votre paiement',
+                        style: TextStyle(fontSize: 11.sp, color: AppColors.textPrimary),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '100 %',
+                    style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    height: 6.h,
+                    decoration: BoxDecoration(
+                      color: AppColors.grey200,
+                      borderRadius: BorderRadius.circular(3.r),
+                    ),
+                  ),
+                  FractionallySizedBox(
+                    widthFactor: 0.5,
+                    child: Container(
+                      height: 6.h,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF5BA710),
+                        borderRadius: BorderRadius.circular(3.r),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: -2,
+                    child: Align(
+                      alignment: const FractionalOffset(0.5, 0.0),
+                      child: Container(
+                        width: 10.w,
+                        height: 10.h,
+                        decoration: const BoxDecoration(
+                          color: AppColors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 6.w,
+                            height: 6.h,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF5BA710),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 14,
+                    child: Align(
+                      alignment: const FractionalOffset(0.5, 0.0),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF5BA710),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Text(
+                          '25%',
+                          style: TextStyle(color: AppColors.white, fontSize: 10.sp, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h),
             ],
           ),
         ),
 
         Container(
           color: AppColors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Historique des paiements',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                        horizontal: 8.w,
+                        vertical: 4.h,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.accentGreen.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: const Row(
                         children: [
                           Icon(
                             Icons.check_circle_outline,
-                            size: 12,
+                            size: 12.sp,
                             color: AppColors.accentGreen,
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 4.w),
                           Text(
                             'À jour',
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 10.sp,
                               color: AppColors.accentGreen,
                               fontWeight: FontWeight.bold,
                             ),
@@ -235,7 +315,7 @@ class _ContratTabState extends State<ContratTab> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
 
                 _buildPaymentItem(
                   date: 'Jeudi 24 Avril 2026',
@@ -261,13 +341,13 @@ class _ContratTabState extends State<ContratTab> {
 
   Widget _buildCircleButton(IconData icon) {
     return Container(
-      width: 36,
-      height: 36,
-      decoration: const BoxDecoration(
+      width: 48.w,
+      height: 48.h,
+      decoration: BoxDecoration(
         color: AppColors.white,
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(20.r),
       ),
-      child: Icon(icon, color: AppColors.textPrimary, size: 18),
+      child: Icon(icon, color: AppColors.textPrimary, size: 22.sp),
     );
   }
 
@@ -275,59 +355,69 @@ class _ContratTabState extends State<ContratTab> {
     required IconData icon,
     required String title,
     required String subtitle,
-    required Color bgColor,
+    Color? bgColor,
+    Gradient? gradient,
     required Color textColor,
     required Color iconColor,
     required Color iconBgColor,
     bool showArrow = false,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      height: 64.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
+        color: gradient != null ? null : bgColor,
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(20.r),
         border: bgColor == AppColors.grey50
             ? Border.all(color: AppColors.grey200)
-            : null,
+            : Border.all(color: Colors.transparent, width: 1.w),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: iconBgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 16, color: iconColor),
-              ),
-              if (showArrow)
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: textColor.withValues(alpha: 0.7),
-                  size: 18,
-                ),
-            ],
+          Container(
+            padding: EdgeInsets.all(6.w),
+            decoration: BoxDecoration(
+              color: iconBgColor,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Icon(icon, size: 16.sp, color: iconColor),
           ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: textColor,
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: textColor.withValues(alpha: 0.8),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 11,
-              color: textColor.withValues(alpha: 0.8),
+          if (showArrow) ...[
+            SizedBox(width: 4.w),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: textColor.withValues(alpha: 0.7),
+              size: 16.sp,
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -341,98 +431,136 @@ class _ContratTabState extends State<ContratTab> {
     required String status,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.only(bottom: 16),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.grey200)),
+      height: 98.h,
+      margin: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: AppColors.grey50,
+        borderRadius: BorderRadius.circular(20.r),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            radius: 16,
-            backgroundColor: AppColors.grey200,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=11'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      const CircleAvatar(
+                        radius: 16.r,
+                        backgroundColor: AppColors.grey200,
+                        backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=11'),
+                      ),
+                      Positioned(
+                        bottom: -2,
+                        right: -2,
+                        child: Container(
+                          width: 14.w,
+                          height: 14.h,
+                          decoration: BoxDecoration(
+                            color: AppColors.accentGreen,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.grey50, width: 2.w),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.check,
+                              color: AppColors.white,
+                              size: 8.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 12.w),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        date,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        time,
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: AppColors.textHint,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                amount,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      date,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    Text(
-                      amount,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      time,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.textHint.withValues(alpha: 0.8),
-                      ),
-                    ),
-                    Text(
-                      status,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.accentGreen,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
                   description,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textHint,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: AppColors.textPrimary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: AppColors.accentGreen.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.accentGreen,
                   ),
                 ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ClientDetailsScreen(),
-                      ),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text(
-                    'Télécharger la facture',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primaryBlue,
-                    ),
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+          const Spacer(),
+          TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: Text(
+              'Télécharger la facture',
+              style: TextStyle(
+                fontSize: 11.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.primaryBlue,
+              ),
             ),
           ),
         ],

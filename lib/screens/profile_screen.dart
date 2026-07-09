@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
-import 'main_dashboard_screen.dart';
+import 'dashboard_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -41,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const MainDashboardScreen()),
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
         (route) => false,
       );
     }
@@ -60,181 +61,187 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 16),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 16.h),
 
-                  // Illustration
-                  SizedBox(
-                    height: 170,
-                    child: Image.asset(
-                      'assets/images/auth_profile.png',
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 500.ms)
-                      .slideY(begin: -0.1, end: 0, duration: 500.ms),
+                          // Illustration
+                          SizedBox(
+                                height: 170.h,
+                                child: Image.asset(
+                                  'assets/images/auth_profile.png',
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                              .animate()
+                              .fadeIn(duration: 500.ms)
+                              .slideY(begin: -0.1, end: 0, duration: 500.ms),
 
-                  const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
 
-                  // Title
-                  const Text(
-                    'Vous y êtes presque !',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                      letterSpacing: -0.3,
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms, delay: 150.ms),
+                          // Title
+                          Text(
+                            'Vous y êtes presque !',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textPrimary,
+                              letterSpacing: -0.3,
+                            ),
+                          ).animate().fadeIn(duration: 400.ms, delay: 150.ms),
 
-                  const SizedBox(height: 8),
+                          SizedBox(height: 4.h),
 
-                  // Subtitle
-                  const Text(
-                    'Renseignez ces informations pour personnaliser votre expérience.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textHint,
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 28),
-
-                  // Nom + Prénom row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildTextField(
-                          controller: _nomController,
-                          hint: 'Nom',
-                          icon: Icons.person_outline_rounded,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _buildTextField(
-                          controller: _prenomController,
-                          hint: 'Prénom',
-                          icon: Icons.person_outline_rounded,
-                        ),
-                      ),
-                    ],
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms, delay: 250.ms),
-
-                  const SizedBox(height: 14),
-
-                  // Mail
-                  _buildTextField(
-                    controller: _mailController,
-                    hint: 'Mail',
-                    icon: Icons.mail_outline_rounded,
-                    keyboardType: TextInputType.emailAddress,
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms, delay: 350.ms),
-
-                  const SizedBox(height: 14),
-
-                  // Ville
-                  _buildTextField(
-                    controller: _villeController,
-                    hint: 'Ville',
-                    icon: Icons.location_on_outlined,
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms, delay: 450.ms),
-
-                  const SizedBox(height: 28),
-
-                  // "C'est parti !" button
-                  SizedBox(
-                    height: 52,
-                    child: ElevatedButton(
-                      onPressed: _onSubmit,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryBlue,
-                        foregroundColor: AppColors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(26),
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      child: const Text("C'est parti !"),
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms, delay: 500.ms),
-
-                  const SizedBox(height: 24),
-
-                  // Divider text
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(height: 1, color: AppColors.grey200),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          'Ou finalisez la création de votre compte autrement',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: AppColors.textHint,
+                          // Subtitle
+                          Text(
+                            'Renseignez ces informations pour personnaliser votre expérience.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: AppColors.textHint,
+                              height: 2,
+                            ),
                           ),
-                        ),
+
+                          SizedBox(height: 14.h),
+
+                          // Nom + Prénom row
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildTextField(
+                                  controller: _nomController,
+                                  hint: 'Nom',
+                                  icon: Icons.person_outline_rounded,
+                                ),
+                              ),
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: _buildTextField(
+                                  controller: _prenomController,
+                                  hint: 'Prénom',
+                                  icon: Icons.person_outline_rounded,
+                                ),
+                              ),
+                            ],
+                          ).animate().fadeIn(duration: 400.ms, delay: 250.ms),
+
+                          SizedBox(height: 14.h),
+
+                          // Mail
+                          _buildTextField(
+                            controller: _mailController,
+                            hint: 'Mail',
+                            icon: Icons.mail_outline_rounded,
+                            keyboardType: TextInputType.emailAddress,
+                          ).animate().fadeIn(duration: 400.ms, delay: 350.ms),
+
+                          SizedBox(height: 14.h),
+
+                          // Ville
+                          _buildTextField(
+                            controller: _villeController,
+                            hint: 'Ville',
+                            icon: Icons.location_on_outlined,
+                          ).animate().fadeIn(duration: 400.ms, delay: 450.ms),
+
+                          SizedBox(height: 16.h),
+
+                          // "C'est parti !" button
+                          SizedBox(
+                            height: 48.h,
+                            child: ElevatedButton(
+                              onPressed: _onSubmit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryBlue,
+                                foregroundColor: AppColors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                ),
+                                textStyle: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              child: const Text("C'est parti !"),
+                            ),
+                          ).animate().fadeIn(duration: 400.ms, delay: 500.ms),
+
+                          SizedBox(height: 16.h),
+
+                          // Divider text
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 1.h,
+                                  color: AppColors.grey200,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                child: Text(
+                                  'Ou finalisez la création de votre compte autrement',
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: AppColors.textHint,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  height: 1.h,
+                                  color: AppColors.grey200,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 16.h),
+
+                          // Google button
+                          _buildSocialButton(
+                            label: 'Continuer avec Google',
+                            iconPath: null,
+                            icon: Icons.g_mobiledata_rounded,
+                            onTap: _onGoogleSignIn,
+                            isGoogle: true,
+                          ),
+
+                          SizedBox(height: 12.h),
+
+                          // Apple button
+                          _buildSocialButton(
+                            label: 'Continuer avec Apple',
+                            iconPath: null,
+                            icon: Icons.apple_rounded,
+                            onTap: _onAppleSignIn,
+                            isGoogle: false,
+                          ),
+
+                          SizedBox(height: 32.h),
+                        ],
                       ),
-                      Expanded(
-                        child: Container(height: 1, color: AppColors.grey200),
-                      ),
-                    ],
+                    ),
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Google button
-                  _buildSocialButton(
-                    label: 'Continuer avec Google',
-                    iconPath: null,
-                    icon: Icons.g_mobiledata_rounded,
-                    onTap: _onGoogleSignIn,
-                    isGoogle: true,
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Apple button
-                  _buildSocialButton(
-                    label: 'Continuer avec Apple',
-                    iconPath: null,
-                    icon: Icons.apple_rounded,
-                    onTap: _onAppleSignIn,
-                    isGoogle: false,
-                  ),
-
-                  const SizedBox(height: 32),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
@@ -249,37 +256,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
-      style: const TextStyle(
-        fontSize: 14,
+      style: TextStyle(
+        fontSize: 14.sp,
         fontWeight: FontWeight.w500,
         color: AppColors.textPrimary,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(
-          fontSize: 14,
+        hintStyle: TextStyle(
+          fontSize: 14.sp,
           fontWeight: FontWeight.w400,
           color: AppColors.textHint,
         ),
-        prefixIcon: Icon(
-          icon,
-          size: 20,
-          color: AppColors.grey400,
-        ),
+        prefixIcon: Icon(icon, size: 20.sp, color: AppColors.grey400),
         filled: true,
         fillColor: AppColors.grey50,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 14.h,
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(color: AppColors.grey200),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(color: AppColors.grey200),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryBlue, width: 1.5),
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide(
+            color: AppColors.primaryBlue,
+            width: 1.5.w,
+          ),
         ),
       ),
       validator: (value) {
@@ -299,50 +308,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required bool isGoogle,
   }) {
     return SizedBox(
-      height: 50,
+      height: 48.h,
       child: OutlinedButton(
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.textPrimary,
-          side: const BorderSide(color: AppColors.grey200),
+          side: BorderSide(color: const Color(0xFF727783), width: 1.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(20.r),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isGoogle)
-              // Google "G" icon with colors
-              Container(
-                width: 22,
-                height: 22,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: const Center(
-                  child: Text(
-                    'G',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF4285F4),
-                    ),
-                  ),
-                ),
-              )
+              Image.asset('assets/images/Icon_google.jpeg', width: 22.w, height: 22.w)
             else
-              Icon(
-                icon,
-                size: 22,
-                color: AppColors.textPrimary,
-              ),
-            const SizedBox(width: 10),
+              Icon(icon, size: 22.sp, color: AppColors.textPrimary),
+            SizedBox(width: 10.w),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 14,
+              style: TextStyle(
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
                 color: AppColors.grey700,
               ),

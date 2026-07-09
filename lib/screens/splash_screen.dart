@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import 'onboarding_screen.dart';
 
@@ -96,58 +97,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   Widget _buildLogo() {
     return SizedBox(
-      width: 100,
-      height: 100,
-      child: CustomPaint(painter: _KekeLogoPainter()),
+      width: 56.w,
+      height: 42.h,
+      child: Image.asset('assets/images/image1.png', fit: BoxFit.contain),
     );
   }
-}
-
-/// Custom painter for the stylized "K" logo
-class _KekeLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.5
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-
-    final w = size.width;
-    final h = size.height;
-
-    // Stylized "K" — vertical line
-    final verticalPath = Path();
-    verticalPath.moveTo(w * 0.3, h * 0.2);
-    verticalPath.lineTo(w * 0.3, h * 0.8);
-    canvas.drawPath(verticalPath, paint);
-
-    // Upper diagonal (going right-up from middle)
-    final upperDiag = Path();
-    upperDiag.moveTo(w * 0.3, h * 0.5);
-    upperDiag.lineTo(w * 0.7, h * 0.2);
-    canvas.drawPath(upperDiag, paint);
-
-    // Lower diagonal (going right-down from middle)
-    final lowerDiag = Path();
-    lowerDiag.moveTo(w * 0.3, h * 0.5);
-    lowerDiag.lineTo(w * 0.7, h * 0.8);
-    canvas.drawPath(lowerDiag, paint);
-
-    // Small accent stroke on upper diagonal
-    final accent = Paint()
-      ..color = AppColors.accentGreen
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5
-      ..strokeCap = StrokeCap.round;
-
-    final accentPath = Path();
-    accentPath.moveTo(w * 0.45, h * 0.38);
-    accentPath.lineTo(w * 0.55, h * 0.30);
-    canvas.drawPath(accentPath, accent);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

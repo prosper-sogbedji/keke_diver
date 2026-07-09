@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
 import '../../providers/driver_state_provider.dart';
 import '../../utils/app_colors.dart';
 
@@ -17,105 +20,136 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                'Votre profil',
+    return Container(
+      color: AppColors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: AppColors.textPrimary,
+                      ),
+                      onPressed: () {
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ),
+                Text(
+                  'Votre profil',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 4),
-              const Text(
-                'Consultez et les informations de votre profil',
-                style: TextStyle(fontSize: 12, color: AppColors.textHint),
+              SizedBox(height: 4.h),
+              Text(
+                'Consultez les informations de votre profil',
+                style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
-              // Profile Card
+              // Profile Card — height:80.h, border-radius:20.r, gradient
               Container(
-                padding: const EdgeInsets.all(16),
+                height: 80.h,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F265C), // Dark blue from mockup
-                  borderRadius: BorderRadius.circular(24),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF003AB9), Color(0xFF001A53)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Row(
                   children: [
+                    // Avatar + verified badge
                     Stack(
+                      clipBehavior: Clip.none,
                       children: [
                         CircleAvatar(
-                          radius: 28,
-                          backgroundColor: AppColors.grey200,
-                          backgroundImage: NetworkImage(user.profileImageUrl),
+                          radius: 28.r,
+                          backgroundColor: AppColors.white,
+                          child: CircleAvatar(
+                            radius: 26.r,
+                            backgroundColor: AppColors.grey200,
+                            backgroundImage: NetworkImage(user.profileImageUrl),
+                          ),
                         ),
                         if (user.isVerified)
                           Positioned(
-                            bottom: 0,
-                            right: 0,
+                            bottom: -2,
+                            right: -2,
                             child: Container(
-                              width: 16,
-                              height: 16,
+                              width: 20.w,
+                              height: 20.h,
                               decoration: BoxDecoration(
-                                color: AppColors.accentGreen,
+                                color: const Color(0xFF59B900),
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: AppColors.white,
-                                  width: 2,
+                                  width: 2.w,
                                 ),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.check,
-                                size: 10,
+                                size: 11.sp,
                                 color: AppColors.white,
                               ),
                             ),
                           ),
                       ],
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 14.w),
+                    // Name + subtitle + rating stacked on left
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             user.fullName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 2.h),
                           Text(
                             'Membre KEKE+ depuis ${user.memberSince}',
                             style: TextStyle(
-                              color: AppColors.white.withValues(alpha: 0.7),
-                              fontSize: 11,
+                              color: AppColors.white,
+                              fontSize: 11.sp,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Row(
                             children: [
                               const Icon(
                                 Icons.star,
-                                color: Color(0xFFFFB800),
-                                size: 14,
+                                color: Color(0xFFFFD700),
+                                size: 14.sp,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 3.w),
                               Text(
                                 '${user.rating}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -123,17 +157,18 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                         ],
                       ),
                     ),
+                    // Share button — 48x48, border-radius:20.r
                     Container(
-                      width: 40,
-                      height: 40,
-                      decoration: const BoxDecoration(
+                      width: 48.w,
+                      height: 48.h,
+                      decoration: BoxDecoration(
                         color: AppColors.white,
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: const Icon(
-                        Icons.ios_share,
-                        color: Color(0xFF0F265C),
-                        size: 20,
+                        Icons.open_in_new_rounded,
+                        color: Color(0xFF001A53),
+                        size: 22.sp,
                       ),
                     ),
                   ],
@@ -145,109 +180,175 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
 
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 100),
+            padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 100.h),
             children: [
-              const Text(
+              Text(
                 'Compte',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 12.h),
 
-              _buildSettingsItem(
-                icon: Icons.person_outline,
-                title: 'Informations personnelles',
-                subtitle: 'Nom, adresse mail, téléphone',
-                onTap: () => _showPersonalInfoModal(context),
-              ),
-              _buildSettingsItem(
-                icon: Icons.payments_outlined,
-                title: 'Moyens de paiement',
-                subtitle: 'MTN MoMo, Moov Money, Celtiis Cash',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Fonctionnalité bientôt disponible'),
-                      behavior: SnackBarBehavior.floating,
+              // Section Compte — width:358.w, height:192.h, border-radius:20.r, border-width:1px
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: const Color(0xFFE0E0E0), width: 1.w),
+                ),
+                child: Column(
+                  children: [
+                    _buildSettingsItem(
+                      icon: CupertinoIcons.person,
+                      title: 'Informations personnelles',
+                      subtitle: 'Nom, adresse mail, téléphone',
+                      onTap: () => _showPersonalInfoModal(context),
+                      isFirst: true,
+                      isLast: false,
                     ),
-                  );
-                },
-              ),
-              _buildSettingsItem(
-                icon: Icons.star_outline_rounded,
-                title: 'Avis et notations',
-                subtitle: 'Commentaires',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Fonctionnalité bientôt disponible'),
-                      behavior: SnackBarBehavior.floating,
+                    const Divider(
+                      height: 1.h,
+                      thickness: 1,
+                      color: Color(0xFFE0E0E0),
+                      indent: 16,
+                      endIndent: 16,
                     ),
-                  );
-                },
+                    _buildSettingsItem(
+                      icon: IconlyLight.wallet,
+                      title: 'Moyens de paiement',
+                      subtitle: 'MTN MoMo, Moov Money, carte de crédit...',
+                      onTap: () {},
+                      isFirst: false,
+                      isLast: false,
+                    ),
+                    const Divider(
+                      height: 1.h,
+                      thickness: 1,
+                      color: Color(0xFFE0E0E0),
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    _buildSettingsItem(
+                      icon: IconlyLight.star,
+                      title: 'Avis et notations',
+                      subtitle: 'Commentaires',
+                      onTap: () {},
+                      isFirst: false,
+                      isLast: true,
+                    ),
+                  ],
+                ),
               ),
 
-              const SizedBox(height: 24),
-
-              const Text(
+              SizedBox(height: 24.h),
+              Text(
                 'Préférences',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 12.h),
 
-              _buildSettingsItem(
-                icon: Icons.notifications_none_rounded,
-                title: 'Notifications',
-                subtitle: 'Push, email',
-                trailing: Switch(
-                  value: _notificationsEnabled,
-                  onChanged: (val) {
-                    setState(() {
-                      _notificationsEnabled = val;
-                    });
-                  },
-                  activeTrackColor: AppColors.accentGreen,
+              // Section Préférences — width:358.w, height:128.h, border-radius:20.r, border-width:1px
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: const Color(0xFFE0E0E0), width: 1.w),
                 ),
+                child: Column(
+                  children: [
+                    _buildSettingsItem(
+                      icon: Icons.notifications_active_outlined,
+                      title: 'Notifications',
+                      subtitle: 'Push, email',
+                      trailing: Switch(
+                        value: _notificationsEnabled,
+                        onChanged: (val) =>
+                            setState(() => _notificationsEnabled = val),
+                        activeTrackColor: AppColors.accentGreen,
+                        activeThumbColor: AppColors.white,
+                      ),
+                      onTap: () {},
+                      isFirst: true,
+                      isLast: false,
+                    ),
+                    const Divider(
+                      height: 1.h,
+                      thickness: 1,
+                      color: Color(0xFFE0E0E0),
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    _buildSettingsItem(
+                      icon: Icons.translate,
+                      title: 'Langue',
+                      subtitle: 'Français',
+                      onTap: () {},
+                      isFirst: false,
+                      isLast: true,
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 28.h),
+
+              // Footer — "Conditions d'utilisation" link
+              GestureDetector(
                 onTap: () {},
-              ),
-              _buildSettingsItem(
-                icon: Icons.language,
-                title: 'Langue',
-                subtitle: 'Français',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Fonctionnalité bientôt disponible'),
-                      behavior: SnackBarBehavior.floating,
+                child: const Row(
+                  children: [
+                    Text(
+                      "Conditions d'utilisation et politique de confidentialité",
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: AppColors.primaryBlue,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  );
-                },
-              ),
-              _buildSettingsItem(
-                icon: Icons.dark_mode_outlined,
-                title: 'Thème de l\'application',
-                subtitle: 'Clair',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Fonctionnalité bientôt disponible'),
-                      behavior: SnackBarBehavior.floating,
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.chevron_right,
+                      color: AppColors.primaryBlue,
+                      size: 18.sp,
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
+
+              SizedBox(height: 16.h),
+
+              // Footer — Déconnexion
+              GestureDetector(
+                onTap: () {},
+                child: const Row(
+                  children: [
+                    Icon(Icons.logout, color: AppColors.textPrimary, size: 20.sp),
+                    SizedBox(width: 12.w),
+                    Text(
+                      'Déconnexion',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 24.h),
             ],
           ),
         ),
       ],
+    ),
     );
   }
 
@@ -257,45 +358,49 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
     required String subtitle,
     Widget? trailing,
     required VoidCallback onTap,
+    bool isFirst = false,
+    bool isLast = false,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         decoration: BoxDecoration(
-          color: AppColors.grey50,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.grey200),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.vertical(
+            top: isFirst ? const Radius.circular(20.r) : Radius.zero,
+            bottom: isLast ? const Radius.circular(20.r) : Radius.zero,
+          ),
         ),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              width: 40.w,
+              height: 40.h,
               decoration: BoxDecoration(
-                color: AppColors.grey200,
-                borderRadius: BorderRadius.circular(12),
+                color: const Color(0xFFEAEAEA),
+                borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Icon(icon, color: AppColors.textPrimary, size: 20),
+              child: Icon(icon, color: AppColors.textPrimary, size: 20.sp),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 2.h),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                      fontSize: 11,
+                    style: TextStyle(
+                      fontSize: 12.sp,
                       color: AppColors.textHint,
                     ),
                   ),
@@ -305,9 +410,10 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
             if (trailing != null)
               trailing
             else
-              const Icon(
+              Icon(
                 Icons.chevron_right_rounded,
                 color: AppColors.textHint,
+                size: 20.sp,
               ),
           ],
         ),
@@ -328,43 +434,43 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
           decoration: const BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(24),
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
             ),
           ),
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Center(
                 child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 24),
+                  width: 40.w,
+                  height: 4.h,
+                  margin: EdgeInsets.only(bottom: 24.h),
                   decoration: BoxDecoration(
                     color: AppColors.grey200,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
               ),
-              const Text(
+              Text(
                 'Informations personnelles',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               _buildEditableField('Nom', 'YACOUBOU'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildEditableField('Prénom', 'Dieu-donné'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildEditableField('Adresse mail', 'ddonneyacoubou@gmail.com'),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
 
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
@@ -373,16 +479,16 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                   foregroundColor: AppColors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(26),
+                    borderRadius: BorderRadius.circular(26.r),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
                 ),
-                child: const Text(
+                child: Text(
                   'Enregistrer',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
             ],
           ),
         ),
@@ -392,30 +498,30 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
 
   Widget _buildEditableField(String label, String value) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: AppColors.grey200),
       ),
       child: TextFormField(
         initialValue: value,
-        style: const TextStyle(
-          fontSize: 14,
+        style: TextStyle(
+          fontSize: 14.sp,
           fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            fontSize: 12,
+          labelStyle: TextStyle(
+            fontSize: 12.sp,
             color: AppColors.textHint,
             fontWeight: FontWeight.normal,
           ),
           border: InputBorder.none,
-          suffixIcon: const Icon(
+          suffixIcon: Icon(
             Icons.edit_outlined,
-            size: 16,
+            size: 16.sp,
             color: AppColors.textHint,
           ),
         ),

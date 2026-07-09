@@ -17,6 +17,87 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedVehicleIndex = 0; // 0: Voiture, 1: Tricycle, 2: Moto
   bool _appointmentScheduled = false;
 
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      final day = picked.day.toString().padLeft(2, '0');
+      final month = picked.month.toString().padLeft(2, '0');
+      _dateController.text = "$day/$month/${picked.year}";
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      if (!context.mounted) return;
+      final localizations = MaterialLocalizations.of(context);
+      _timeController.text = localizations.formatTimeOfDay(
+        picked,
+        alwaysUse24HourFormat: true,
+      );
+    }
+  }
+
+  Future<void> _pickFile(String docName) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Sélectionner un fichier pour : $docName')),
+    );
+  }
+
+  void _showPhotoPickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Photo d\'identité',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt_outlined),
+              title: const Text('Prendre une photo (Caméra)'),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Ouverture de la caméra...')),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: const Text('Choisir dans la galerie'),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Ouverture de la galerie...')),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -39,10 +120,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _buildHeader(),
             _buildWalletCard(),
             _buildStatusSection(),
-            _buildTabs(),
+            if (!_appointmentScheduled) _buildTabs(),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 child: _currentStep == 1 ? _buildStep1() : _buildStep2(),
               ),
             ),
@@ -54,33 +138,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Logo Keke
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: CustomPaint(
-                  painter: _MiniKekeLogoPainter(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const MainDashboardScreen(),
                 ),
-              ),
-              const SizedBox(width: 4),
-              const Text(
-                'Littoral >',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/logo_blue.png.jpeg',
+                  width: 36,
+                  height: 32,
+                  fit: BoxFit.contain,
                 ),
-              ),
-            ],
+                const SizedBox(height: 2),
+                const Text(
+                  'Littoral >',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
           ),
-          
+
           // Icons right
           Row(
             children: [
@@ -116,7 +210,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) => const MainDashboardScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const MainDashboardScreen(),
+                    ),
                   );
                 },
                 child: Container(
@@ -147,25 +243,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildWalletCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: AppColors.primaryBlue,
-          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF003AB9), Color(0xFF001A53)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Portefeuille',
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: AppColors.white, fontSize: 12),
                 ),
                 SizedBox(height: 4),
                 Text(
@@ -182,7 +281,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 _buildCardButton(Icons.add),
                 const SizedBox(width: 12),
-                _buildCardButton(Icons.upload_rounded),
+                _buildCardButton(Icons.file_upload_outlined),
               ],
             ),
           ],
@@ -193,23 +292,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildCardButton(IconData icon) {
     return Container(
-      width: 44,
-      height: 44,
-      decoration: const BoxDecoration(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
         color: AppColors.white,
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Icon(
-        icon,
-        color: AppColors.primaryBlue,
-        size: 22,
-      ),
+      child: Icon(icon, color: AppColors.textPrimary, size: 24),
     );
   }
 
   Widget _buildStatusSection() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -230,7 +325,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _isInactive ? 'Inactif' : 'Actif',
                     style: TextStyle(
                       fontSize: 12,
-                      color: _isInactive ? AppColors.textHint : AppColors.primaryBlue,
+                      color: _isInactive
+                          ? AppColors.textHint
+                          : AppColors.primaryBlue,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -258,10 +355,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 8),
           const Text(
             'Avant de continuer, votre profil doit être validé',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.textHint,
-            ),
+            style: TextStyle(fontSize: 13, color: AppColors.textHint),
           ),
         ],
       ),
@@ -270,7 +364,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildTabs() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Expanded(
@@ -281,7 +375,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: _currentStep == 1 ? AppColors.accentGreen : AppColors.grey200,
+                      color: _currentStep == 1
+                          ? AppColors.accentGreen
+                          : AppColors.grey200,
                       width: 2,
                     ),
                   ),
@@ -289,14 +385,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Row(
                   children: [
                     if (_currentStep == 2)
-                      const Icon(Icons.check, size: 16, color: AppColors.accentGreen),
+                      const Icon(
+                        Icons.check,
+                        size: 16,
+                        color: AppColors.accentGreen,
+                      ),
                     if (_currentStep == 2) const SizedBox(width: 4),
                     Text(
                       'Étape 1/2',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: _currentStep == 1 ? FontWeight.bold : FontWeight.w500,
-                        color: _currentStep == 1 ? AppColors.textPrimary : AppColors.textHint,
+                        fontWeight: _currentStep == 1
+                            ? FontWeight.bold
+                            : FontWeight.w500,
+                        color: _currentStep == 1
+                            ? AppColors.textPrimary
+                            : AppColors.textHint,
                       ),
                     ),
                   ],
@@ -312,7 +416,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: _currentStep == 2 ? AppColors.accentGreen : AppColors.grey200,
+                      color: _currentStep == 2
+                          ? AppColors.accentGreen
+                          : AppColors.grey200,
                       width: 2,
                     ),
                   ),
@@ -323,8 +429,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       'Étape 2/2',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: _currentStep == 2 ? FontWeight.bold : FontWeight.w500,
-                        color: _currentStep == 2 ? AppColors.textPrimary : AppColors.textHint,
+                        fontWeight: _currentStep == 2
+                            ? FontWeight.bold
+                            : FontWeight.w500,
+                        color: _currentStep == 2
+                            ? AppColors.textPrimary
+                            : AppColors.textHint,
                       ),
                     ),
                   ],
@@ -353,20 +463,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(height: 4),
         const Text(
           '(Image ou document)',
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.textHint,
-          ),
+          style: TextStyle(fontSize: 12, color: AppColors.textHint),
         ),
         const SizedBox(height: 16),
-        _buildUploadField("Pièce d'identité (CIP, Passeport, etc)"),
-        const SizedBox(height: 12),
-        _buildUploadField("Attestation de résidence"),
-        const SizedBox(height: 12),
-        _buildUploadField("Casier judiciaire"),
-        const SizedBox(height: 12),
-        _buildUploadField("Photo d'identité"),
-        
+        _buildUploadField(
+          "Pièce d'identité (CIP, Passeport, etc)",
+          onTap: () => _pickFile("Pièce d'identité"),
+        ),
+        const SizedBox(height: 10),
+        _buildUploadField(
+          "Attestation de résidence",
+          onTap: () => _pickFile("Attestation de résidence"),
+        ),
+        const SizedBox(height: 10),
+        _buildUploadField(
+          "Casier judiciaire",
+          onTap: () => _pickFile("Casier judiciaire"),
+        ),
+        const SizedBox(height: 10),
+        _buildUploadField(
+          "Photo d'identité",
+          onTap: () => _showPhotoPickerOptions(),
+        ),
+
         const SizedBox(height: 24),
         const Text(
           'Personne à contacter en cas d\'urgence',
@@ -379,13 +498,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _buildInputField(hint: 'Nom', icon: Icons.person_outline_rounded)),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Nom',
+                icon: Icons.person_outline_rounded,
+              ),
+            ),
             const SizedBox(width: 12),
-            Expanded(child: _buildInputField(hint: 'Prénom', icon: Icons.person_outline_rounded)),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Prénom',
+                icon: Icons.person_outline_rounded,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
-        _buildInputField(hint: 'Numéro de téléphone', icon: Icons.phone_outlined, isPhone: true),
+        _buildInputField(
+          hint: 'Numéro de téléphone',
+          icon: Icons.phone_outlined,
+          isPhone: true,
+        ),
 
         const SizedBox(height: 24),
         const Text(
@@ -399,14 +532,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: _buildInputField(hint: 'Nom', icon: Icons.person_outline_rounded)),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Nom',
+                icon: Icons.person_outline_rounded,
+              ),
+            ),
             const SizedBox(width: 12),
-            Expanded(child: _buildInputField(hint: 'Prénom', icon: Icons.person_outline_rounded)),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Prénom',
+                icon: Icons.person_outline_rounded,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
-        _buildInputField(hint: 'Numéro de téléphone', icon: Icons.phone_outlined, isPhone: true),
-        
+        _buildInputField(
+          hint: 'Numéro de téléphone',
+          icon: Icons.phone_outlined,
+          isPhone: true,
+        ),
+
         const SizedBox(height: 32),
         SizedBox(
           height: 52,
@@ -420,7 +567,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: AppColors.primaryBlue,
               foregroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(26),
+                borderRadius: BorderRadius.circular(20),
               ),
               elevation: 0,
             ),
@@ -449,8 +596,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.primaryBlue.withValues(alpha: 0.3)),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.primaryBlue.withValues(alpha: 0.3),
+            ),
           ),
           child: Row(
             children: [
@@ -460,14 +609,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: _hasEngine ? const Color(0xFF2B364A) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
+                      color: _hasEngine
+                          ? const Color(0xFF2B364A)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       "J'ai un engin",
                       style: TextStyle(
-                        color: _hasEngine ? AppColors.white : AppColors.textHint,
+                        color: _hasEngine
+                            ? AppColors.white
+                            : AppColors.textHint,
                         fontWeight: FontWeight.w500,
                         fontSize: 13,
                       ),
@@ -481,14 +634,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: !_hasEngine ? const Color(0xFF2B364A) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
+                      color: !_hasEngine
+                          ? const Color(0xFF2B364A)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       "Je souhaite obtenir un engin",
                       style: TextStyle(
-                        color: !_hasEngine ? AppColors.white : AppColors.textHint,
+                        color: !_hasEngine
+                            ? AppColors.white
+                            : AppColors.textHint,
                         fontWeight: FontWeight.w500,
                         fontSize: 13,
                       ),
@@ -514,16 +671,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // Vehicles
         Row(
           children: [
-            Expanded(child: _buildVehicleCard(0, 'Voiture', 'assets/images/voiture.png')),
+            Expanded(
+              child: _buildVehicleCard(
+                0,
+                'Voiture',
+                'assets/images/Vehicul.png',
+                isRawIcon: true,
+              ),
+            ),
             const SizedBox(width: 12),
-            Expanded(child: _buildVehicleCard(1, 'Tricycle', 'assets/images/tricycle.png')),
+            Expanded(
+              child: _buildVehicleCard(
+                1,
+                'Tricycle',
+                'assets/images/tricycle.png',
+              ),
+            ),
             const SizedBox(width: 12),
-            Expanded(child: _buildVehicleCard(2, 'Moto', 'assets/images/moto.png')),
+            Expanded(
+              child: _buildVehicleCard(2, 'Moto', 'assets/images/moto.png'),
+            ),
           ],
         ),
 
         const SizedBox(height: 16),
-        _buildInputField(hint: "Numéro d'immatriculation", icon: Icons.feed_outlined),
+        _buildInputField(
+          hint: "Numéro d'immatriculation",
+          icon: Icons.feed_outlined,
+        ),
 
         const SizedBox(height: 32),
         const Text(
@@ -538,9 +713,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
         Row(
           children: [
-            Expanded(child: _buildInputField(hint: 'Jour / Mois', icon: Icons.calendar_today_outlined)),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Jour / Mois',
+                icon: Icons.calendar_today_outlined,
+                readOnly: true,
+                onTap: () => _selectDate(context),
+                controller: _dateController,
+              ),
+            ),
             const SizedBox(width: 12),
-            Expanded(child: _buildInputField(hint: 'Heure', icon: Icons.access_time)),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Heure',
+                icon: Icons.access_time,
+                readOnly: true,
+                onTap: () => _selectTime(context),
+                controller: _timeController,
+              ),
+            ),
           ],
         ),
 
@@ -550,17 +741,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           children: [
             Container(
-              width: 52,
-              height: 52,
-              decoration: const BoxDecoration(
-                color: Color(0xFF2B364A),
-                shape: BoxShape.circle,
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFF2B364A),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: IconButton(
                 onPressed: () {
                   setState(() => _currentStep = 1);
                 },
-                icon: const Icon(Icons.chevron_left_rounded, color: AppColors.white, size: 28),
+                icon: const Icon(
+                  Icons.chevron_left_rounded,
+                  color: AppColors.white,
+                  size: 28,
+                ),
               ),
             ),
             const SizedBox(width: 16),
@@ -577,7 +772,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     backgroundColor: AppColors.primaryBlue,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(26),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     elevation: 0,
                   ),
@@ -608,13 +803,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.grey50,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.grey200),
+            color: const Color(0xFFF5F5F5),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: const Color(0xFFE6E6E6), width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -624,7 +819,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const CircleAvatar(
                     radius: 20,
                     backgroundColor: AppColors.grey200,
-                    backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=11'), // Dummy image for avatar
+                    backgroundImage: NetworkImage(
+                      'https://i.pravatar.cc/100?img=11',
+                    ), // Dummy image for avatar
                   ),
                   const SizedBox(width: 12),
                   const Expanded(
@@ -654,14 +851,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _buildSmallButton('Annuler', true),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
               const Text(
                 'Lieu de la rencontre',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: AppColors.textHint,
-                ),
+                style: TextStyle(fontSize: 11, color: AppColors.textHint),
               ),
               const SizedBox(height: 4),
               Row(
@@ -729,65 +923,78 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildVehicleCard(int index, String title, String imagePath) {
+  Widget _buildVehicleCard(
+    int index,
+    String title,
+    String imagePath, {
+    bool isRawIcon = false,
+  }) {
     final isSelected = _selectedVehicleIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _selectedVehicleIndex = index),
       child: Container(
-        height: 100,
+        height: 90,
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.white : AppColors.grey50,
-          borderRadius: BorderRadius.circular(16),
+          color: isRawIcon ? const Color(0xFFF8F8F8) : null,
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primaryBlue : AppColors.grey200,
-            width: isSelected ? 1.5 : 1,
+            color: isSelected ? AppColors.primaryBlue : Colors.transparent,
+            width: 2,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(imagePath, height: 40, fit: BoxFit.contain),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 12,
-                color: isSelected ? AppColors.primaryBlue : AppColors.textHint,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+        child: isRawIcon
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(imagePath, height: 30, fit: BoxFit.contain),
+                  const SizedBox(height: 12),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textHint,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              )
+            : ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: Image.asset(imagePath, fit: BoxFit.fill),
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
 
-  Widget _buildUploadField(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: AppColors.grey50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.grey200),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.textHint,
+  Widget _buildUploadField(String label, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.grey200, width: 1),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(fontSize: 13, color: AppColors.textHint),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-          ),
-          const Icon(
-            Icons.file_upload_outlined,
-            color: AppColors.grey400,
-            size: 20,
-          ),
-        ],
+            const Icon(
+              Icons.file_upload_outlined,
+              color: AppColors.grey400,
+              size: 20,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -796,34 +1003,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String hint,
     required IconData icon,
     bool isPhone = false,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    TextEditingController? controller,
+    TextInputType? keyboardType,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      height: 48,
       decoration: BoxDecoration(
-        color: AppColors.grey50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.grey200),
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.grey200, width: 1),
       ),
       child: TextFormField(
+        controller: controller,
+        readOnly: readOnly,
+        onTap: onTap,
+        keyboardType:
+            keyboardType ??
+            (isPhone ? TextInputType.phone : TextInputType.text),
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: hint,
-          hintStyle: const TextStyle(
-            fontSize: 13,
-            color: AppColors.textHint,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 14,
           ),
+          hintText: hint,
+          hintStyle: const TextStyle(fontSize: 13, color: AppColors.textHint),
           prefixIcon: isPhone
               ? const Padding(
-                  padding: EdgeInsets.only(right: 8, top: 12, bottom: 12),
-                  child: Text('🇧🇯 +229', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                  padding: EdgeInsets.only(
+                    left: 14,
+                    right: 8,
+                    top: 14,
+                    bottom: 14,
+                  ),
+                  child: Text(
+                    '🇧🇯 +229',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                  ),
                 )
-              : Icon(icon, size: 20, color: AppColors.grey400),
+              : Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 8),
+                  child: Icon(icon, size: 20, color: AppColors.grey400),
+                ),
           prefixIconConstraints: const BoxConstraints(minWidth: 40),
         ),
-        style: const TextStyle(
-          fontSize: 14,
-          color: AppColors.textPrimary,
-        ),
+        style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
       ),
     );
   }
