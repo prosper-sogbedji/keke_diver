@@ -15,22 +15,20 @@ class ClientDetailsScreen extends StatelessWidget {
           children: [
             // Floating Header
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  Container(
+              padding: EdgeInsets.all(16.w),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                     decoration: BoxDecoration(
                       color: const Color(0xFF2B364A),
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Row(
-                      children: const [
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         Text(
                           'Fermer',
                           style: TextStyle(color: AppColors.white, fontSize: 12.sp, fontWeight: FontWeight.bold),
@@ -40,7 +38,7 @@ class ClientDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
             
@@ -147,7 +145,7 @@ class ClientDetailsScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.r),
                               border: Border.all(color: AppColors.grey200),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text('Tableau Timeline', style: TextStyle(color: AppColors.textHint)),
                             ),
                           ),
@@ -167,7 +165,7 @@ class ClientDetailsScreen extends StatelessWidget {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: EdgeInsets.only(bottom: 8.h),
       child: Text(
         title,
         style: TextStyle(
@@ -181,7 +179,7 @@ class ClientDetailsScreen extends StatelessWidget {
 
   Widget _buildParagraph(String text) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 1.h2.0),
+      padding: EdgeInsets.only(bottom: 12.h),
       child: Text(
         text,
         style: TextStyle(

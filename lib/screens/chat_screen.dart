@@ -22,7 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
@@ -89,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 decoration: BoxDecoration(
                   color: AppColors.grey50,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16.r),
                     topRight: Radius.circular(16.r),
                     bottomRight: Radius.circular(16.r),
@@ -142,7 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Flexible(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.primaryBlue,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16.r),
@@ -167,7 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildMessageInput() {
     return Container(
       padding: EdgeInsets.all(24.w),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
       ),
       child: SafeArea(
@@ -182,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 child: TextField(
                   controller: _messageController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Envoyez votre message',
                     hintStyle: TextStyle(color: AppColors.textHint, fontSize: 14.sp),
                     border: InputBorder.none,
@@ -195,7 +195,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Container(
               width: 48.w,
               height: 48.h,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.primaryBlue,
                 shape: BoxShape.circle,
               ),

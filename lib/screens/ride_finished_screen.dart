@@ -20,13 +20,13 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
+          icon: Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -50,7 +50,7 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
               SizedBox(height: 32.h),
               
               // User info
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 32.r,
                 backgroundColor: AppColors.grey200,
                 backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=12'),
@@ -130,7 +130,7 @@ class _RideFinishedScreenState extends State<RideFinishedScreen> {
               ),
               
               // Itinerary
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Itinéraire',

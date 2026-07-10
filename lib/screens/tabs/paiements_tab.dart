@@ -13,6 +13,8 @@ class PaiementsTab extends ConsumerStatefulWidget {
 }
 
 class _PaiementsTabState extends ConsumerState<PaiementsTab> {
+  String _selectedFilter = 'Tout';
+
   @override
   Widget build(BuildContext context) {
     final balance = ref.watch(walletBalanceProvider);
@@ -104,13 +106,30 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildFilterDropdown('Tout', isSelected: true),
+                    _buildFilterDropdown(
+                      'Tout',
+                      isSelected: _selectedFilter == 'Tout',
+                      onTap: () => setState(() => _selectedFilter = 'Tout'),
+                    ),
                     SizedBox(width: 8.w),
-                    _buildFilterDropdown('Date'),
+                    _buildFilterDropdown(
+                      'Date',
+                      isSelected: _selectedFilter == 'Date',
+                      onTap: () => setState(() => _selectedFilter = 'Date'),
+                    ),
                     SizedBox(width: 8.w),
-                    _buildFilterDropdown('Débit/Crédit'),
+                    _buildFilterDropdown(
+                      'Débit/Crédit',
+                      isSelected: _selectedFilter == 'Débit/Crédit',
+                      onTap: () => setState(() => _selectedFilter = 'Débit/Crédit'),
+                    ),
                     SizedBox(width: 8.w),
-                    _buildFilterDropdown('Catégorie', showArrow: false),
+                    _buildFilterDropdown(
+                      'Catégorie',
+                      isSelected: _selectedFilter == 'Catégorie',
+                      showArrow: false,
+                      onTap: () => setState(() => _selectedFilter = 'Catégorie'),
+                    ),
                   ],
                 ),
               ),
@@ -148,7 +167,8 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                   ),
                 );
               }
-              final tx = transactions[index - 1];
+              // ignore: unused_local_variable
+              final _ = transactions[index - 1];
               return _buildTransactionItem(
                 title: 'Chez Maman Ella',
                 subtitle: 'Livraison de [ 1x Côme + Poisson + Supplément ]',
@@ -182,29 +202,32 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
     );
   }
 
-  Widget _buildFilterDropdown(String label, {bool showArrow = true, bool isSelected = false}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF2B364A) : Colors.transparent,
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: isSelected ? const Color(0xFF2B364A) : AppColors.textPrimary),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? AppColors.white : AppColors.textPrimary,
-              fontSize: 12.sp,
+  Widget _buildFilterDropdown(String label, {bool showArrow = true, bool isSelected = false, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF2B364A) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: isSelected ? const Color(0xFF2B364A) : AppColors.textPrimary),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? AppColors.white : AppColors.textPrimary,
+                fontSize: 12.sp,
+              ),
             ),
-          ),
-          if (showArrow) ...[
-            SizedBox(width: 4.w),
-            Icon(Icons.keyboard_arrow_down_rounded, size: 16.sp, color: isSelected ? AppColors.white : AppColors.textPrimary),
+            if (showArrow) ...[
+              SizedBox(width: 4.w),
+              Icon(Icons.keyboard_arrow_down_rounded, size: 16.sp, color: isSelected ? AppColors.white : AppColors.textPrimary),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -221,7 +244,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.only(bottom: 16.h),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.grey200)),
       ),
       child: Column(
@@ -233,7 +256,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 16.r,
                     backgroundColor: AppColors.grey200,
                     backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=13'),
@@ -249,7 +272,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.white, width: 2.w),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Icon(
                           Icons.check,
                           color: AppColors.white,
@@ -322,9 +345,17 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
           SizedBox(height: 8.h),
           TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ClientDetailsScreen()),
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => FractionallySizedBox(
+                  heightFactor: 0.95,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+                    child: const ClientDetailsScreen(),
+                  ),
+                ),
               );
             },
             style: TextButton.styleFrom(
@@ -352,7 +383,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24.r),
@@ -397,7 +428,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         '20 000 F',
                         style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -431,7 +462,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     '+2290196000102',
                     style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -455,7 +486,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     'Mobile Money',
                     style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -470,7 +501,7 @@ class _PaiementsTabState extends ConsumerState<PaiementsTab> {
               children: [
                 Icon(Icons.file_download_outlined, size: 20.sp, color: AppColors.textPrimary),
                 SizedBox(width: 12.w),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Télécharger la facture après le paiement',
                     style: TextStyle(fontSize: 13.sp, color: AppColors.textPrimary),

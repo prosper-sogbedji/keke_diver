@@ -61,7 +61,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
 
               // Filters
               Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: AppColors.grey200, width: 1.w),
                   ),
@@ -185,7 +185,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.only(bottom: 16.h),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.grey200)),
       ),
       child: Column(
@@ -300,7 +300,7 @@ class _ActiviteTabState extends ConsumerState<ActiviteTab> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 10.w,
                   vertical: 6.h,
                 ),

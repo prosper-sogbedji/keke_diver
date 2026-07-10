@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconly/iconly.dart';
+// import 'package:flutter_iconly/flutter_iconly.dart';
 import '../../providers/driver_state_provider.dart';
 import '../../utils/app_colors.dart';
 
 class ProfilTab extends ConsumerStatefulWidget {
-  const ProfilTab({super.key});
+  final VoidCallback? onBack;
+  const ProfilTab({super.key, this.onBack});
 
   @override
   ConsumerState<ProfilTab> createState() => _ProfilTabState();
@@ -15,6 +16,7 @@ class ProfilTab extends ConsumerStatefulWidget {
 
 class _ProfilTabState extends ConsumerState<ProfilTab> {
   bool _notificationsEnabled = true;
+  String _selectedLanguage = 'Français';
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,9 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                         color: AppColors.textPrimary,
                       ),
                       onPressed: () {
-                        if (Navigator.canPop(context)) {
+                        if (widget.onBack != null) {
+                          widget.onBack!();
+                        } else if (Navigator.canPop(context)) {
                           Navigator.pop(context);
                         }
                       },
@@ -138,7 +142,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                           SizedBox(height: 4.h),
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.star,
                                 color: Color(0xFFFFD700),
                                 size: 14.sp,
@@ -165,7 +169,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.open_in_new_rounded,
                         color: Color(0xFF001A53),
                         size: 22.sp,
@@ -209,7 +213,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                       isFirst: true,
                       isLast: false,
                     ),
-                    const Divider(
+                    Divider(
                       height: 1.h,
                       thickness: 1,
                       color: Color(0xFFE0E0E0),
@@ -217,14 +221,14 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                       endIndent: 16,
                     ),
                     _buildSettingsItem(
-                      icon: IconlyLight.wallet,
+                      icon: Icons.account_balance_wallet_outlined,
                       title: 'Moyens de paiement',
                       subtitle: 'MTN MoMo, Moov Money, carte de crédit...',
                       onTap: () {},
                       isFirst: false,
                       isLast: false,
                     ),
-                    const Divider(
+                    Divider(
                       height: 1.h,
                       thickness: 1,
                       color: Color(0xFFE0E0E0),
@@ -232,7 +236,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                       endIndent: 16,
                     ),
                     _buildSettingsItem(
-                      icon: IconlyLight.star,
+                      icon: Icons.star_outline,
                       title: 'Avis et notations',
                       subtitle: 'Commentaires',
                       onTap: () {},
@@ -278,7 +282,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                       isFirst: true,
                       isLast: false,
                     ),
-                    const Divider(
+                    Divider(
                       height: 1.h,
                       thickness: 1,
                       color: Color(0xFFE0E0E0),
@@ -288,8 +292,8 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
                     _buildSettingsItem(
                       icon: Icons.translate,
                       title: 'Langue',
-                      subtitle: 'Français',
-                      onTap: () {},
+                      subtitle: _selectedLanguage,
+                      onTap: () => _showLanguageModal(context),
                       isFirst: false,
                       isLast: true,
                     ),
@@ -302,7 +306,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
               // Footer — "Conditions d'utilisation" link
               GestureDetector(
                 onTap: () {},
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
                       "Conditions d'utilisation et politique de confidentialité",
@@ -327,7 +331,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
               // Footer — Déconnexion
               GestureDetector(
                 onTap: () {},
-                child: const Row(
+                child: Row(
                   children: [
                     Icon(Icons.logout, color: AppColors.textPrimary, size: 20.sp),
                     SizedBox(width: 12.w),
@@ -368,8 +372,8 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.vertical(
-            top: isFirst ? const Radius.circular(20.r) : Radius.zero,
-            bottom: isLast ? const Radius.circular(20.r) : Radius.zero,
+            top: isFirst ? Radius.circular(20.r) : Radius.zero,
+            bottom: isLast ? Radius.circular(20.r) : Radius.zero,
           ),
         ),
         child: Row(
@@ -431,7 +435,7 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24.r),
@@ -526,6 +530,61 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showLanguageModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      backgroundColor: AppColors.white,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 24.h),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Choisir la langue',
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              SizedBox(height: 16.h),
+              _buildLangOption('Français'),
+              _buildLangOption('English'),
+              _buildLangOption('Español'),
+              SizedBox(height: 16.h),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLangOption(String lang) {
+    return ListTile(
+      title: Text(
+        lang,
+        style: TextStyle(
+          fontSize: 16.sp,
+          color: _selectedLanguage == lang ? AppColors.primaryBlue : AppColors.textPrimary,
+          fontWeight: _selectedLanguage == lang ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      trailing: _selectedLanguage == lang 
+          ? Icon(Icons.check, color: AppColors.primaryBlue) 
+          : null,
+      onTap: () {
+        setState(() {
+          _selectedLanguage = lang;
+        });
+        Navigator.pop(context);
+      },
     );
   }
 }

@@ -12,22 +12,11 @@ final userProvider = Provider<UserModel>((ref) {
 
 // Driver State Providers
 final isDriverActiveProvider = StateProvider<bool>((ref) => false);
-final selectedVehicleIndexProvider = StateProvider<int>((ref) => 0);
 final selectedServiceProvider = StateProvider<String>((ref) => 'Les deux');
 
 // Rides Provider
 final recentRidesProvider = Provider<List<RideModel>>((ref) {
   return DummyData.recentRides;
-});
-
-// Active Ride Provider (nullable if no active ride)
-final activeRideProvider = Provider<RideModel?>((ref) {
-  final rides = ref.watch(recentRidesProvider);
-  try {
-    return rides.firstWhere((ride) => ride.status == RideStatus.ongoing);
-  } catch (e) {
-    return null;
-  }
 });
 
 // Transactions Provider

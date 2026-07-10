@@ -19,6 +19,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _mailController = TextEditingController();
   final _villeController = TextEditingController();
 
+  final _nomFocus = FocusNode();
+  final _prenomFocus = FocusNode();
+  final _mailFocus = FocusNode();
+  final _villeFocus = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +41,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _prenomController.dispose();
     _mailController.dispose();
     _villeController.dispose();
+    _nomFocus.dispose();
+    _prenomFocus.dispose();
+    _mailFocus.dispose();
+    _villeFocus.dispose();
     super.dispose();
   }
 
@@ -126,6 +135,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   controller: _nomController,
                                   hint: 'Nom',
                                   icon: Icons.person_outline_rounded,
+                                  focusNode: _nomFocus,
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_prenomFocus),
                                 ),
                               ),
                               SizedBox(width: 12.w),
@@ -134,6 +146,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   controller: _prenomController,
                                   hint: 'Prénom',
                                   icon: Icons.person_outline_rounded,
+                                  focusNode: _prenomFocus,
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_mailFocus),
                                 ),
                               ),
                             ],
@@ -147,6 +162,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             hint: 'Mail',
                             icon: Icons.mail_outline_rounded,
                             keyboardType: TextInputType.emailAddress,
+                            focusNode: _mailFocus,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_villeFocus),
                           ).animate().fadeIn(duration: 400.ms, delay: 350.ms),
 
                           SizedBox(height: 14.h),
@@ -156,6 +174,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             controller: _villeController,
                             hint: 'Ville',
                             icon: Icons.location_on_outlined,
+                            focusNode: _villeFocus,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _onSubmit(),
                           ).animate().fadeIn(duration: 400.ms, delay: 450.ms),
 
                           SizedBox(height: 16.h),
@@ -252,10 +273,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String hint,
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
+    FocusNode? focusNode,
+    TextInputAction? textInputAction,
+    ValueChanged<String>? onFieldSubmitted,
   }) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
       style: TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,

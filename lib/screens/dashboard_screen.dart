@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import 'main_dashboard_screen.dart';
 
@@ -58,18 +59,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _showPhotoPickerOptions() {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: EdgeInsets.all(16.w),
               child: Text(
                 'Photo d\'identité',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -123,9 +124,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (!_appointmentScheduled) _buildTabs(),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 16.h,
                 ),
                 child: _currentStep == 1 ? _buildStep1() : _buildStep2(),
               ),
@@ -138,35 +139,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Logo Keke
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const MainDashboardScreen(),
-                ),
-              );
-            },
+            onTap: () {},
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
-                  'assets/images/logo_blue.png.jpeg',
-                  width: 36,
-                  height: 32,
+                  'assets/images/logo_blue.png',
+                  width: 36.w,
+                  height: 32.h,
                   fit: BoxFit.contain,
                 ),
-                const SizedBox(height: 2),
-                const Text(
+                SizedBox(height: 2.h),
+                Text(
                   'Littoral >',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
@@ -175,29 +168,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
 
-          // Icons right
           Row(
             children: [
               Stack(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.notifications_none_rounded, size: 28),
+                  Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: Icon(Icons.notifications_none_rounded, size: 28.sp),
                   ),
                   Positioned(
-                    right: 4,
-                    top: 4,
+                    right: 4.w,
+                    top: 4.h,
                     child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: EdgeInsets.all(4.w),
                       decoration: const BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
-                      child: const Text(
+                      child: Text(
                         '2',
                         style: TextStyle(
                           color: AppColors.white,
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -205,30 +197,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               GestureDetector(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const MainDashboardScreen(),
-                    ),
-                  );
-                },
+                onTap: () {},
                 child: Container(
-                  width: 36,
-                  height: 36,
+                  width: 36.w,
+                  height: 36.h,
                   decoration: const BoxDecoration(
                     color: AppColors.primaryBlue,
                     shape: BoxShape.circle,
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'A',
                       style: TextStyle(
                         color: AppColors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ),
@@ -243,35 +228,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildWalletCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Container(
-        height: 80,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        height: 80.h,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF003AB9), Color(0xFF001A53)],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Portefeuille',
-                  style: TextStyle(color: AppColors.white, fontSize: 12),
+                  style: TextStyle(color: AppColors.white, fontSize: 12.sp),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   '0 FCFA',
                   style: TextStyle(
                     color: AppColors.white,
-                    fontSize: 22,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -280,7 +265,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Row(
               children: [
                 _buildCardButton(Icons.add),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 _buildCardButton(Icons.file_upload_outlined),
               ],
             ),
@@ -292,29 +277,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildCardButton(IconData icon) {
     return Container(
-      width: 48,
-      height: 48,
+      width: 48.w,
+      height: 48.h,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
-      child: Icon(icon, color: AppColors.textPrimary, size: 24),
+      child: Icon(icon, color: AppColors.textPrimary, size: 24.sp),
     );
   }
 
   Widget _buildStatusSection() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+      padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Bienvenue, François',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -324,23 +309,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                     _isInactive ? 'Inactif' : 'Actif',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: _isInactive
                           ? AppColors.textHint
                           : AppColors.primaryBlue,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   SizedBox(
-                    height: 24,
-                    width: 44,
+                    height: 24.h,
+                    width: 44.w,
                     child: Switch(
                       value: !_isInactive,
                       onChanged: (val) {
                         setState(() {
                           _isInactive = !val;
                         });
+                        if (val) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const MainDashboardScreen(),
+                            ),
+                          );
+                        }
                       },
                       activeThumbColor: AppColors.white,
                       activeTrackColor: AppColors.primaryBlue,
@@ -352,10 +345,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8.h),
+          Text(
             'Avant de continuer, votre profil doit être validé',
-            style: TextStyle(fontSize: 13, color: AppColors.textHint),
+            style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
           ),
         ],
       ),
@@ -364,14 +357,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildTabs() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Row(
         children: [
           Expanded(
             child: GestureDetector(
               onTap: () => setState(() => _currentStep = 1),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(vertical: 12.h),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -385,16 +378,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Row(
                   children: [
                     if (_currentStep == 2)
-                      const Icon(
+                      Icon(
                         Icons.check,
-                        size: 16,
+                        size: 16.sp,
                         color: AppColors.accentGreen,
                       ),
-                    if (_currentStep == 2) const SizedBox(width: 4),
+                    if (_currentStep == 2) SizedBox(width: 4.w),
                     Text(
                       'Étape 1/2',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: _currentStep == 1
                             ? FontWeight.bold
                             : FontWeight.w500,
@@ -412,7 +405,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: GestureDetector(
               onTap: () => setState(() => _currentStep = 2),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(vertical: 12.h),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -428,7 +421,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Text(
                       'Étape 2/2',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: _currentStep == 2
                             ? FontWeight.bold
                             : FontWeight.w500,
@@ -447,55 +440,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // --- ÉTAPE 1 ---
   Widget _buildStep1() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
+        Text(
           'Importez les documents suivants',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 4),
-        const Text(
+        SizedBox(height: 4.h),
+        Text(
           '(Image ou document)',
-          style: TextStyle(fontSize: 12, color: AppColors.textHint),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.textHint),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         _buildUploadField(
           "Pièce d'identité (CIP, Passeport, etc)",
           onTap: () => _pickFile("Pièce d'identité"),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         _buildUploadField(
           "Attestation de résidence",
           onTap: () => _pickFile("Attestation de résidence"),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         _buildUploadField(
           "Casier judiciaire",
           onTap: () => _pickFile("Casier judiciaire"),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         _buildUploadField(
           "Photo d'identité",
           onTap: () => _showPhotoPickerOptions(),
         ),
 
-        const SizedBox(height: 24),
-        const Text(
+        SizedBox(height: 24.h),
+        Text(
           'Personne à contacter en cas d\'urgence',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         Row(
           children: [
             Expanded(
@@ -504,7 +496,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: Icons.person_outline_rounded,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: _buildInputField(
                 hint: 'Prénom',
@@ -513,23 +505,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         _buildInputField(
           hint: 'Numéro de téléphone',
           icon: Icons.phone_outlined,
           isPhone: true,
         ),
 
-        const SizedBox(height: 24),
-        const Text(
+        SizedBox(height: 24.h),
+        Text(
           'Avaliseur ou garant',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         Row(
           children: [
             Expanded(
@@ -538,7 +530,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: Icons.person_outline_rounded,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: _buildInputField(
                 hint: 'Prénom',
@@ -547,16 +539,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         _buildInputField(
           hint: 'Numéro de téléphone',
           icon: Icons.phone_outlined,
           isPhone: true,
         ),
 
-        const SizedBox(height: 32),
+        SizedBox(height: 32.h),
         SizedBox(
-          height: 52,
+          height: 52.h,
           child: ElevatedButton(
             onPressed: () {
               setState(() {
@@ -567,22 +559,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: AppColors.primaryBlue,
               foregroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               elevation: 0,
             ),
-            child: const Text(
+            child: Text(
               'Enregistrer et continuer',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
             ),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
       ],
     );
   }
 
-  // --- ÉTAPE 2 ---
   Widget _buildStep2() {
     if (_appointmentScheduled) {
       return _buildAppointmentScheduledView();
@@ -591,12 +582,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Toggle J'ai un engin / Je souhaite...
         Container(
-          padding: const EdgeInsets.all(4),
+          padding: EdgeInsets.all(4.w),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
               color: AppColors.primaryBlue.withValues(alpha: 0.3),
             ),
@@ -607,12 +597,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: GestureDetector(
                   onTap: () => setState(() => _hasEngine = true),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
                     decoration: BoxDecoration(
                       color: _hasEngine
                           ? const Color(0xFF2B364A)
                           : Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -622,7 +612,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ? AppColors.white
                             : AppColors.textHint,
                         fontWeight: FontWeight.w500,
-                        fontSize: 13,
+                        fontSize: 13.sp,
                       ),
                     ),
                   ),
@@ -632,12 +622,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: GestureDetector(
                   onTap: () => setState(() => _hasEngine = false),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
                     decoration: BoxDecoration(
                       color: !_hasEngine
                           ? const Color(0xFF2B364A)
                           : Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -647,7 +637,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ? AppColors.white
                             : AppColors.textHint,
                         fontWeight: FontWeight.w500,
-                        fontSize: 13,
+                        fontSize: 13.sp,
                       ),
                     ),
                   ),
@@ -657,18 +647,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
 
-        const SizedBox(height: 24),
-        const Text(
+        SizedBox(height: 24.h),
+        Text(
           'Engin utilisé',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
-        // Vehicles
         Row(
           children: [
             Expanded(
@@ -679,7 +668,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isRawIcon: true,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: _buildVehicleCard(
                 1,
@@ -687,29 +676,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 'assets/images/tricycle.png',
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: _buildVehicleCard(2, 'Moto', 'assets/images/moto.png'),
             ),
           ],
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         _buildInputField(
           hint: "Numéro d'immatriculation",
           icon: Icons.feed_outlined,
         ),
 
-        const SizedBox(height: 32),
-        const Text(
+        SizedBox(height: 32.h),
+        Text(
           'Pour finaliser la validation de votre profil, nous devons vous rencontrer.\nQuand êtes-vous disponible ?',
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 13.sp,
             color: AppColors.textPrimary,
             height: 1.5,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         Row(
           children: [
@@ -722,7 +711,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 controller: _dateController,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: _buildInputField(
                 hint: 'Heure',
@@ -735,33 +724,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
 
-        const SizedBox(height: 48),
+        SizedBox(height: 48.h),
 
-        // Bottom buttons
         Row(
           children: [
             Container(
-              width: 48,
-              height: 48,
+              width: 48.w,
+              height: 48.h,
               decoration: BoxDecoration(
                 color: const Color(0xFF2B364A),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: IconButton(
                 onPressed: () {
                   setState(() => _currentStep = 1);
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.chevron_left_rounded,
                   color: AppColors.white,
-                  size: 28,
+                  size: 28.sp,
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
             Expanded(
               child: SizedBox(
-                height: 52,
+                height: 52.h,
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
@@ -772,20 +760,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     backgroundColor: AppColors.primaryBlue,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Enregistrer et valider',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
       ],
     );
   }
@@ -794,21 +782,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
+        Text(
           'Votre rendez-vous',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             color: const Color(0xFFF5F5F5),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             border: Border.all(color: const Color(0xFFE6E6E6), width: 1),
           ),
           child: Column(
@@ -816,14 +804,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 20,
+                  CircleAvatar(
+                    radius: 20.r,
                     backgroundColor: AppColors.grey200,
-                    backgroundImage: NetworkImage(
+                    backgroundImage: const NetworkImage(
                       'https://i.pravatar.cc/100?img=11',
-                    ), // Dummy image for avatar
+                    ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -847,17 +835,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   _buildSmallButton('Modifier', false),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   _buildSmallButton('Annuler', true),
                 ],
               ),
 
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: 16.h),
+              Text(
                 'Lieu de la rencontre',
-                style: TextStyle(fontSize: 11, color: AppColors.textHint),
+                style: TextStyle(fontSize: 11.sp, color: AppColors.textHint),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -872,7 +860,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 32,
+                    height: 32.h,
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
@@ -880,15 +868,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         foregroundColor: AppColors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Text('Contacter', style: TextStyle(fontSize: 12)),
-                          SizedBox(width: 4),
-                          Icon(Icons.chevron_right_rounded, size: 16),
+                          Text('Contacter', style: TextStyle(fontSize: 12.sp)),
+                          SizedBox(width: 4.w),
+                          Icon(Icons.chevron_right_rounded, size: 16.sp),
                         ],
                       ),
                     ),
@@ -904,11 +892,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildSmallButton(String text, bool isOutlined) {
     return Container(
-      height: 28,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 28.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
         color: isOutlined ? Colors.transparent : const Color(0xFF2B364A),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         border: isOutlined ? Border.all(color: const Color(0xFF2B364A)) : null,
       ),
       alignment: Alignment.center,
@@ -916,7 +904,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         text,
         style: TextStyle(
           color: isOutlined ? const Color(0xFF2B364A) : AppColors.white,
-          fontSize: 11,
+          fontSize: 11.sp,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -933,10 +921,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return GestureDetector(
       onTap: () => setState(() => _selectedVehicleIndex = index),
       child: Container(
-        height: 90,
+        height: 90.h,
         decoration: BoxDecoration(
           color: isRawIcon ? const Color(0xFFF8F8F8) : null,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isSelected ? AppColors.primaryBlue : Colors.transparent,
             width: 2,
@@ -946,12 +934,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(imagePath, height: 30, fit: BoxFit.contain),
-                  const SizedBox(height: 12),
+                  Image.asset(imagePath, height: 30.h, fit: BoxFit.contain),
+                  SizedBox(height: 12.h),
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: TextStyle(
+                      fontSize: 12.sp,
                       color: AppColors.textHint,
                       fontWeight: FontWeight.w400,
                     ),
@@ -959,7 +947,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               )
             : ClipRRect(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(18.r),
                 child: Image.asset(imagePath, fit: BoxFit.fill),
               ),
       ),
@@ -970,11 +958,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 48,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
+        height: 48.h,
+        padding: EdgeInsets.symmetric(horizontal: 14.w),
         decoration: BoxDecoration(
           color: const Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: AppColors.grey200, width: 1),
         ),
         child: Row(
@@ -983,15 +971,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(fontSize: 13, color: AppColors.textHint),
+                style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const Icon(
+            Icon(
               Icons.file_upload_outlined,
               color: AppColors.grey400,
-              size: 20,
+              size: 20.sp,
             ),
           ],
         ),
@@ -1009,10 +997,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     TextInputType? keyboardType,
   }) {
     return Container(
-      height: 48,
+      height: 48.h,
       decoration: BoxDecoration(
         color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(color: AppColors.grey200, width: 1),
       ),
       child: TextFormField(
@@ -1024,78 +1012,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
             (isPhone ? TextInputType.phone : TextInputType.text),
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 14,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 14.w,
+            vertical: 14.h,
           ),
           hintText: hint,
-          hintStyle: const TextStyle(fontSize: 13, color: AppColors.textHint),
+          hintStyle: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
           prefixIcon: isPhone
-              ? const Padding(
+              ? Padding(
                   padding: EdgeInsets.only(
-                    left: 14,
-                    right: 8,
-                    top: 14,
-                    bottom: 14,
+                    left: 14.w,
+                    right: 8.w,
+                    top: 14.h,
+                    bottom: 14.h,
                   ),
                   child: Text(
                     '🇧🇯 +229',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
                   ),
                 )
               : Padding(
-                  padding: const EdgeInsets.only(left: 14, right: 8),
-                  child: Icon(icon, size: 20, color: AppColors.grey400),
+                  padding: EdgeInsets.only(left: 14.w, right: 8.w),
+                  child: Icon(icon, size: 20.sp, color: AppColors.grey400),
                 ),
-          prefixIconConstraints: const BoxConstraints(minWidth: 40),
+          prefixIconConstraints: BoxConstraints(minWidth: 40.w),
         ),
-        style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+        style: TextStyle(fontSize: 14.sp, color: AppColors.textPrimary),
       ),
     );
   }
 }
 
-/// Mini logo Keke for header
-class _MiniKekeLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.primaryBlue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
 
-    final w = size.width;
-    final h = size.height;
-
-    final verticalPath = Path();
-    verticalPath.moveTo(w * 0.3, h * 0.2);
-    verticalPath.lineTo(w * 0.3, h * 0.8);
-    canvas.drawPath(verticalPath, paint);
-
-    final upperDiag = Path();
-    upperDiag.moveTo(w * 0.3, h * 0.5);
-    upperDiag.lineTo(w * 0.7, h * 0.2);
-    canvas.drawPath(upperDiag, paint);
-
-    final lowerDiag = Path();
-    lowerDiag.moveTo(w * 0.3, h * 0.5);
-    lowerDiag.lineTo(w * 0.7, h * 0.8);
-    canvas.drawPath(lowerDiag, paint);
-
-    final accent = Paint()
-      ..color = AppColors.accentGreen
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-
-    final accentPath = Path();
-    accentPath.moveTo(w * 0.45, h * 0.38);
-    accentPath.lineTo(w * 0.55, h * 0.30);
-    canvas.drawPath(accentPath, accent);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../providers/driver_state_provider.dart';
 import '../models/notification_model.dart';
 import '../utils/app_colors.dart';
@@ -30,35 +31,35 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Notifications',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
-                const Text(
+                SizedBox(height: 4.h),
+                Text(
                   'Ne ratez rien de tout ce qui se passe !',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: AppColors.textHint,
                   ),
                 ),
-                const SizedBox(height: 24),
-                
+                SizedBox(height: 24.h),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
                         _buildFilterChip('Tout'),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         _buildFilterChip('Non lues'),
                       ],
                     ),
@@ -71,11 +72,11 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.done_all_rounded, size: 16, color: AppColors.textPrimary),
-                      label: const Text(
+                      icon: Icon(Icons.done_all_rounded, size: 16.sp, color: AppColors.textPrimary),
+                      label: Text(
                         'Tout marquer comme lu',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 11.sp,
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.w500,
                         ),
@@ -91,21 +92,21 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               ],
             ),
           ),
-          
+
           Expanded(
             child: Builder(
               builder: (context) {
                 final notifications = ref.watch(notificationsProvider);
-                
+
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
                   itemCount: notifications.length,
                   itemBuilder: (context, index) {
                     final notif = notifications[index];
-                    
+
                     IconData? icon;
                     Color? iconBgColor;
-                    
+
                     switch (notif.type) {
                       case NotificationType.payment:
                         icon = Icons.attach_money;
@@ -132,7 +133,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     );
                   },
                 );
-              }
+              },
             ),
           ),
         ],
@@ -145,10 +146,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     return GestureDetector(
       onTap: () => setState(() => _selectedFilter = label),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF2B364A) : AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isSelected ? const Color(0xFF2B364A) : AppColors.grey200,
           ),
@@ -157,9 +158,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           children: [
             if (!isSelected)
               Container(
-                width: 6,
-                height: 6,
-                margin: const EdgeInsets.only(right: 6),
+                width: 6.w,
+                height: 6.h,
+                margin: EdgeInsets.only(right: 6.w),
                 decoration: const BoxDecoration(
                   color: AppColors.accentGreen,
                   shape: BoxShape.circle,
@@ -169,7 +170,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               label,
               style: TextStyle(
                 color: isSelected ? AppColors.white : AppColors.textPrimary,
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),
@@ -190,8 +191,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     required bool isUnread,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.only(bottom: 16.h),
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.grey200)),
       ),
@@ -200,21 +201,21 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         children: [
           if (avatarUrl != null)
             CircleAvatar(
-              radius: 18,
+              radius: 18.r,
               backgroundColor: AppColors.grey200,
               backgroundImage: NetworkImage(avatarUrl),
             )
           else if (icon != null)
             Container(
-              width: 36,
-              height: 36,
+              width: 36.w,
+              height: 36.h,
               decoration: BoxDecoration(
                 color: iconBgColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: iconColor, size: 18),
+              child: Icon(icon, color: iconColor, size: 18.sp),
             ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,8 +227,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     Expanded(
                       child: Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: TextStyle(
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
                         ),
@@ -237,9 +238,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                       children: [
                         if (isUnread)
                           Container(
-                            width: 6,
-                            height: 6,
-                            margin: const EdgeInsets.only(right: 4),
+                            width: 6.w,
+                            height: 6.h,
+                            margin: EdgeInsets.only(right: 4.w),
                             decoration: const BoxDecoration(
                               color: AppColors.accentGreen,
                               shape: BoxShape.circle,
@@ -248,7 +249,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                         Text(
                           time,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 10.sp,
                             color: AppColors.textHint.withValues(alpha: 0.8),
                           ),
                         ),
@@ -256,11 +257,11 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   message,
-                  style: const TextStyle(
-                    fontSize: 11,
+                  style: TextStyle(
+                    fontSize: 11.sp,
                     color: AppColors.textHint,
                     height: 1.4,
                   ),

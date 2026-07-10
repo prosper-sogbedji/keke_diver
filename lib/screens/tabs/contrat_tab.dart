@@ -42,7 +42,7 @@ class _ContratTabState extends State<ContratTab> {
               // Status Banner
               Container(
                 height: 80.h,
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 16.w,
                 ),
                 decoration: BoxDecoration(
@@ -131,7 +131,7 @@ class _ContratTabState extends State<ContratTab> {
               SizedBox(height: 24.h),
 
               // Statistics
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Statistiques',
@@ -226,7 +226,7 @@ class _ContratTabState extends State<ContratTab> {
                       child: Container(
                         width: 10.w,
                         height: 10.h,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AppColors.white,
                           shape: BoxShape.circle,
                         ),
@@ -234,7 +234,7 @@ class _ContratTabState extends State<ContratTab> {
                           child: Container(
                             width: 6.w,
                             height: 6.h,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               color: Color(0xFF5BA710),
                               shape: BoxShape.circle,
                             ),
@@ -246,7 +246,7 @@ class _ContratTabState extends State<ContratTab> {
                   Positioned(
                     left: 0,
                     right: 0,
-                    top: 14,
+                    top: 14.h,
                     child: Align(
                       alignment: const FractionalOffset(0.5, 0.0),
                       child: Container(
@@ -286,7 +286,7 @@ class _ContratTabState extends State<ContratTab> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 8.w,
                         vertical: 4.h,
                       ),
@@ -294,7 +294,7 @@ class _ContratTabState extends State<ContratTab> {
                         color: AppColors.accentGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(
                             Icons.check_circle_outline,
@@ -451,7 +451,7 @@ class _ContratTabState extends State<ContratTab> {
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 16.r,
                         backgroundColor: AppColors.grey200,
                         backgroundImage: NetworkImage('https://i.pravatar.cc/100?img=11'),
@@ -467,7 +467,7 @@ class _ContratTabState extends State<ContratTab> {
                             shape: BoxShape.circle,
                             border: Border.all(color: AppColors.grey50, width: 2.w),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Icon(
                               Icons.check,
                               color: AppColors.white,
@@ -532,7 +532,7 @@ class _ContratTabState extends State<ContratTab> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: AppColors.accentGreen.withOpacity(0.15),
+                  color: AppColors.accentGreen.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(

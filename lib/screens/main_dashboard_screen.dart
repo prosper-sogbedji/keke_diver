@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +23,13 @@ class MainDashboardScreen extends ConsumerStatefulWidget {
 
 class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   int _currentIndex = 0;
+  int _currentPromoPage = 0;
+  final _promoController = PageController(viewportFraction: 0.93);
+  Timer? _promoTimer;
+  String _statsFilter = 'Aujourd\'hui';
+  String _activityFilter = 'Tout';
+
+  final _promoCount = 2;
 
   @override
   void initState() {
@@ -32,6 +40,38 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
+    _startPromoTimer();
+  }
+
+  @override
+  void dispose() {
+    _promoTimer?.cancel();
+    _promoController.dispose();
+    super.dispose();
+  }
+
+  void _startPromoTimer() {
+    _promoTimer?.cancel();
+    _promoTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (_promoController.hasClients) {
+        final next = (_currentPromoPage + 1) % _promoCount;
+        _promoController.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  void _onStatsFilterChanged(String value) {
+    setState(() => _statsFilter = value);
+  }
+
+  void _onActivityFilterChanged() {
+    setState(() {
+      _activityFilter = _activityFilter == 'Tout' ? 'Terminées' : 'Tout';
+    });
   }
 
   void _showRideRequest() {
@@ -45,7 +85,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildRideRequestModal() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
@@ -98,7 +138,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       children: [
                         Stack(
                           children: [
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 20.r,
                               backgroundColor: AppColors.grey200,
                               backgroundImage: NetworkImage(
@@ -124,7 +164,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                           ],
                         ),
                         SizedBox(width: 12.w),
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -212,7 +252,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -237,7 +277,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       size: 16.sp,
                       color: AppColors.grey400,
                     ),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
@@ -269,7 +309,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -291,7 +331,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       ],
                     ),
                     Container(width: 1.w, height: 30.h, color: AppColors.grey200),
-                    const Column(
+                    Column(
                       children: [
                         Text(
                           'Distance',
@@ -312,7 +352,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                       ],
                     ),
                     Container(width: 1.w, height: 30.h, color: AppColors.grey200),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
@@ -397,9 +437,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       case 3:
         return const ActiviteTab();
       case 4:
-        return const ProfilTab();
+        return ProfilTab(
+          onBack: () => setState(() => _currentIndex = 0),
+        );
       default:
-        return const Center(
+        return Center(
           child: Text('Inconnu', style: TextStyle(color: AppColors.textHint)),
         );
     }
@@ -419,6 +461,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           if (isActive) _buildActiveRideCard(),
           _buildEnginCard(),
           _buildContractCard(),
+          SizedBox(height: 16.h),
+          _buildPromoCarousel(),
+          SizedBox(height: 24.h),
           _buildStatisticsSection(),
           _buildRecentActivities(),
           SizedBox(height: 24.h),
@@ -457,16 +502,16 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 onLongPress: _showRideRequest,
                 child: Stack(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    Padding(
+                      padding: EdgeInsets.all(8.w),
                       child: Icon(Icons.notifications_none_rounded, size: 28.sp),
                     ),
                     Positioned(
-                      right: 4,
-                      top: 4,
+                      right: 4.w,
+                      top: 4.h,
                       child: Container(
                         padding: EdgeInsets.all(4.w),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
@@ -486,21 +531,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               SizedBox(width: 16.w),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => Scaffold(
-                        appBar: AppBar(
-                          backgroundColor: AppColors.white,
-                          elevation: 0,
-                          iconTheme: const IconThemeData(
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        body: const ProfilTab(),
-                      ),
-                    ),
-                  );
+                  setState(() {
+                    _currentIndex = 4;
+                  });
                 },
                 child: CircleAvatar(
                   radius: 20.r,
@@ -557,7 +590,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   );
                 }),
                 SizedBox(width: 12.w),
-                _buildCardButton(Icons.upload_rounded, onTap: () {
+                _buildCardButton(Icons.file_upload, onTap: () {
                   setState(() => _currentIndex = 1);
                 }),
                 SizedBox(width: 12.w),
@@ -578,11 +611,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       child: Container(
         width: 40.w,
         height: 40.h,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.white,
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(12.r),
         ),
-        child: Icon(icon, color: AppColors.primaryBlue, size: 20.sp),
+        child: Icon(icon, color: AppColors.textPrimary, size: 22.sp),
       ),
     );
   }
@@ -654,7 +687,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Choisissez le(s) service(s) à activer',
             style: TextStyle(
               fontSize: 14.sp,
@@ -724,7 +757,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           children: [
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 20.r,
                   backgroundColor: AppColors.grey200,
                   backgroundImage: NetworkImage(
@@ -732,7 +765,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ),
                 ),
                 SizedBox(width: 12.w),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -755,7 +788,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 12.w,
                     vertical: 6.h,
                   ),
@@ -813,7 +846,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             'Gbegamey, Cotonou',
                             style: TextStyle(
@@ -846,7 +879,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             'Boulevard Steinmetz, Cotonou',
                             style: TextStyle(
@@ -875,14 +908,14 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             SizedBox(height: 20.h),
             Container(
               padding: EdgeInsets.symmetric(vertical: 12.h),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: AppColors.grey200)),
               ),
               child: Row(
                 children: [
                   Expanded(
                     child: Column(
-                      children: const [
+                      children: [
                         Text(
                           'Tarif estimé',
                           style: TextStyle(
@@ -905,7 +938,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Container(width: 1.w, height: 24.h, color: AppColors.grey200),
                   Expanded(
                     child: Column(
-                      children: const [
+                      children: [
                         Text(
                           'Distance',
                           style: TextStyle(
@@ -928,7 +961,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   Container(width: 1.w, height: 24.h, color: AppColors.grey200),
                   Expanded(
                     child: Column(
-                      children: const [
+                      children: [
                         Text(
                           'Durée',
                           style: TextStyle(
@@ -964,7 +997,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: AppColors.grey50,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16.r),
             topRight: Radius.circular(16.r),
           ),
@@ -976,15 +1009,15 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             Container(
               width: 48.w,
               height: 48.h,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.white,
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(12.r),
               ),
-              padding: EdgeInsets.all(8.w),
+              padding: EdgeInsets.all(2.w),
               child: Image.asset('assets/images/moto.png', fit: BoxFit.contain),
             ),
             SizedBox(width: 12.w),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1044,7 +1077,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(16.r),
             bottomRight: Radius.circular(16.r),
           ),
@@ -1057,7 +1090,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -1106,9 +1139,129 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     );
   }
 
+  Widget _buildPromoCarousel() {
+    return SizedBox(
+      height: 104.h,
+      child: PageView.builder(
+        controller: _promoController,
+        padEnds: false,
+        onPageChanged: (page) => setState(() => _currentPromoPage = page),
+        itemCount: _promoCount,
+        itemBuilder: (_, index) {
+          final isPromo = index == 0;
+          final badgeText = isPromo ? 'Promo' : 'Parrainage';
+          final descText = isPromo 
+              ? '-25% sur votre\npremière course !' 
+              : 'Gagnez 500 F\npar filleul !';
+
+          return Container(
+            margin: EdgeInsets.only(
+              left: 16.w,
+              right: index == _promoCount - 1 ? 16.w : 6.w,
+            ),
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              color: AppColors.primaryBlue,
+            ),
+            child: Stack(
+              children: [
+                // Right side image taking exactly half the banner, without gradient
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 175.w,
+                  child: Image.asset(
+                    'assets/images/promo_banner.png',
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      child: Icon(
+                        isPromo ? Icons.local_shipping_rounded : Icons.people_rounded,
+                        color: Colors.white.withValues(alpha: 0.2),
+                        size: 48.sp,
+                      ),
+                    ),
+                  ),
+                ),
+                // Left side content (Promo badge and text)
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  right: 175.w, // Ensures it stays strictly on the blue side
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 4.w, 16.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF5AB315),
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                          child: Text(
+                            badgeText,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11.sp,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Expanded(
+                          child: Text(
+                            descText,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.sp,
+                              height: 1.15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Circular button vertically centered, placed entirely on the blue background
+                Positioned(
+                  right: 180.w, // Placed safely on the blue background, next to the image
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.all(6.w),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 2.w), // slight visual centering for arrow
+                        child: Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: AppColors.primaryBlue,
+                          size: 14.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildStatisticsSection() {
     return Padding(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         children: [
           Row(
@@ -1122,27 +1275,55 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   color: AppColors.textPrimary,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.w,
-                  vertical: 4.h,
+              PopupMenuButton<String>(
+                onSelected: _onStatsFilterChanged,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.grey200),
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: const Row(
-                  children: [
-                    Text(
-                      'Aujourd\'hui',
+                offset: Offset(0, 36.h),
+                itemBuilder: (context) => [
+                  'Aujourd\'hui', 'Hier', 'Cette semaine', 'Ce mois', 'Cette année'
+                ].map((period) {
+                  return PopupMenuItem<String>(
+                    value: period,
+                    height: 36.h,
+                    child: Text(
+                      period,
                       style: TextStyle(
-                        fontSize: 12.sp,
-                        color: AppColors.textPrimary,
+                        fontSize: 13.sp,
+                        color: _statsFilter == period
+                            ? AppColors.primaryBlue
+                            : AppColors.textPrimary,
+                        fontWeight: _statsFilter == period
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                       ),
                     ),
-                    SizedBox(width: 4.w),
-                    Icon(Icons.keyboard_arrow_down_rounded, size: 16.sp),
-                  ],
+                  );
+                }).toList(),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 6.h,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.grey200),
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _statsFilter,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Icon(Icons.keyboard_arrow_down_rounded, size: 16.sp),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -1155,10 +1336,6 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   icon: Icons.pedal_bike_rounded,
                   title: '36',
                   subtitle: 'Courses effectuées',
-                  bgColor: AppColors.grey50,
-                  textColor: AppColors.textPrimary,
-                  iconBgColor: const Color(0xFF2B364A),
-                  iconColor: AppColors.white,
                 ),
               ),
               SizedBox(width: 12.w),
@@ -1167,42 +1344,6 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   icon: Icons.payments_outlined,
                   title: '156 960 F',
                   subtitle: 'Total encaissé',
-                  bgColor: AppColors.grey50,
-                  textColor: AppColors.textPrimary,
-                  iconBgColor: const Color(0xFF2B364A),
-                  iconColor: AppColors.white,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12.h),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatCard(
-                  icon: Icons.access_time_rounded,
-                  title: '6 000 F',
-                  subtitle: 'À payer',
-                  bgColor: const Color(0xFFB91D34),
-                  textColor: AppColors.white,
-                  iconBgColor: AppColors.white,
-                  iconColor: const Color(0xFFB91D34),
-                  showArrow: true,
-                  onTap: () => setState(() => _currentIndex = 2),
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: _buildStatCard(
-                  icon: Icons.star_border_rounded,
-                  title: '4,3/5',
-                  subtitle: 'Note globale',
-                  bgColor: AppColors.accentGreen,
-                  textColor: AppColors.white,
-                  iconBgColor: AppColors.white,
-                  iconColor: AppColors.accentGreen,
-                  showArrow: true,
-                  onTap: () => setState(() => _currentIndex = 4),
                 ),
               ),
             ],
@@ -1216,67 +1357,60 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     required IconData icon,
     required String title,
     required String subtitle,
-    required Color bgColor,
-    required Color textColor,
-    required Color iconBgColor,
-    required Color iconColor,
-    bool showArrow = false,
-    VoidCallback? onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      height: 64.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      decoration: BoxDecoration(
+        color: AppColors.grey50,
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36.w,
+            height: 36.h,
+            decoration: BoxDecoration(
+              color: AppColors.primaryBlue,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Icon(icon, size: 18.sp, color: AppColors.white),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(6.w),
-                  decoration: BoxDecoration(
-                    color: iconBgColor,
-                    borderRadius: BorderRadius.circular(8.r),
+                Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
-                  child: Icon(icon, size: 16.sp, color: iconColor),
                 ),
-                if (showArrow)
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: textColor.withValues(alpha: 0.7),
-                    size: 18.sp,
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: AppColors.textHint,
                   ),
+                ),
               ],
             ),
-            SizedBox(height: 12.h),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
-            ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 11.sp,
-                color: textColor.withValues(alpha: 0.8),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildRecentActivities() {
     final recentRides = ref.watch(recentRidesProvider);
+    final filteredRides = _activityFilter == 'Terminées'
+        ? recentRides.where((r) => r.status == RideStatus.completed).toList()
+        : recentRides;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -1295,95 +1429,124 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => setState(() => _currentIndex = 3),
-                child: const Row(
-                  children: [
-                    Text(
-                      'Tout voir',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryBlue,
+                onTap: _onActivityFilterChanged,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: _activityFilter == 'Terminées'
+                        ? AppColors.primaryBlue.withValues(alpha: 0.1)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        _activityFilter == 'Terminées' ? 'Terminées' : 'Tout voir',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: _activityFilter == 'Terminées'
+                              ? AppColors.primaryBlue
+                              : AppColors.primaryBlue,
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      size: 16.sp,
-                      color: AppColors.primaryBlue,
-                    ),
-                  ],
+                      AnimatedRotation(
+                        turns: _activityFilter == 'Terminées' ? 0.5 : 0,
+                        duration: const Duration(milliseconds: 250),
+                        child: Icon(
+                          _activityFilter == 'Terminées'
+                              ? Icons.filter_list_off_rounded
+                              : Icons.chevron_right_rounded,
+                          size: 16.sp,
+                          color: AppColors.primaryBlue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
           SizedBox(height: 16.h),
-          ...recentRides.map(
-            (ride) => Padding(
-              padding: EdgeInsets.only(bottom: 16.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 18.r,
-                        backgroundColor: AppColors.grey200,
-                        backgroundImage: NetworkImage(ride.clientImageUrl),
-                      ),
-                      if (ride.status == RideStatus.completed)
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            width: 10.w,
-                            height: 10.h,
-                            decoration: BoxDecoration(
-                              color: AppColors.accentGreen,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.white,
-                                width: 2.w,
+          if (filteredRides.isEmpty)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              child: Center(
+                child: Text(
+                  'Aucune activité',
+                  style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
+                ),
+              ),
+            )
+          else
+            ...filteredRides.map(
+              (ride) => Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 18.r,
+                          backgroundColor: AppColors.grey200,
+                          backgroundImage: NetworkImage(ride.clientImageUrl),
+                        ),
+                        if (ride.status == RideStatus.completed)
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              width: 10.w,
+                              height: 10.h,
+                              decoration: BoxDecoration(
+                                color: AppColors.accentGreen,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.white,
+                                  width: 2.w,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ride.clientName,
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        Text(
-                          '${ride.date.hour}:${ride.date.minute.toString().padLeft(2, '0')} • N° ${ride.id.toUpperCase()}',
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: AppColors.textHint,
-                          ),
-                        ),
                       ],
                     ),
-                  ),
-                  Text(
-                    '${ride.price.toInt()} F',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ride.clientName,
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            '${ride.date.hour}:${ride.date.minute.toString().padLeft(2, '0')} • N° ${ride.id.toUpperCase()}',
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: AppColors.textHint,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Text(
+                      '${ride.price.toInt()} F',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -1443,49 +1606,4 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       ),
     );
   }
-}
-
-/// Mini logo Keke for header
-class _MiniKekeLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.primaryBlue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-
-    final w = size.width;
-    final h = size.height;
-
-    final verticalPath = Path();
-    verticalPath.moveTo(w * 0.3, h * 0.2);
-    verticalPath.lineTo(w * 0.3, h * 0.8);
-    canvas.drawPath(verticalPath, paint);
-
-    final upperDiag = Path();
-    upperDiag.moveTo(w * 0.3, h * 0.5);
-    upperDiag.lineTo(w * 0.7, h * 0.2);
-    canvas.drawPath(upperDiag, paint);
-
-    final lowerDiag = Path();
-    lowerDiag.moveTo(w * 0.3, h * 0.5);
-    lowerDiag.lineTo(w * 0.7, h * 0.8);
-    canvas.drawPath(lowerDiag, paint);
-
-    final accent = Paint()
-      ..color = AppColors.accentGreen
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-
-    final accentPath = Path();
-    accentPath.moveTo(w * 0.45, h * 0.38);
-    accentPath.lineTo(w * 0.55, h * 0.30);
-    canvas.drawPath(accentPath, accent);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
