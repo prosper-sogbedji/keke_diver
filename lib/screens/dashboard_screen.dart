@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import '../utils/app_colors.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/custom_appointment_picker.dart';
@@ -51,23 +53,59 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
     );
     if (result != null && result.files.single.path != null) {
+      final path = result.files.single.path!;
+      final ext = path.split('.').last.toLowerCase();
+      String? finalPath = path;
+      // Compresser si c'est une image
+      if (['jpg', 'jpeg', 'png'].contains(ext)) {
+        finalPath = await _compressImage(path);
+      }
       setState(() {
         switch (docKey) {
           case 'identite':
-            _docIdentitePath = result.files.single.path;
+            _docIdentitePath = finalPath;
             break;
           case 'residence':
-            _docResidencePath = result.files.single.path;
+            _docResidencePath = finalPath;
             break;
           case 'casier':
-            _docCasierPath = result.files.single.path;
-            break;
-          case 'photo':
-            _docPhotoPath = result.files.single.path;
+            _docCasierPath = finalPath;
             break;
         }
       });
     }
+  }
+
+  /// Prend une photo via la caméra ou la galerie, puis la compresse
+  Future<void> _pickImage({required ImageSource source}) async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: source,
+      imageQuality: 85, // Pré-compression de ImagePicker
+      maxWidth: 1920,
+      maxHeight: 1920,
+    );
+    if (picked == null) return;
+
+    final compressed = await _compressImage(picked.path);
+    setState(() => _docPhotoPath = compressed ?? picked.path);
+  }
+
+  /// Compresse une image et retourne le chemin du fichier compressé
+  Future<String?> _compressImage(String sourcePath) async {
+    final targetPath = sourcePath.replaceAll(
+      RegExp(r'\.(jpg|jpeg|png)$', caseSensitive: false),
+      '_compressed.jpg',
+    );
+    final result = await FlutterImageCompress.compressAndGetFile(
+      sourcePath,
+      targetPath,
+      quality: 70, // Qualité 70% — bon équilibre qualité/taille
+      minWidth: 1024,
+      minHeight: 1024,
+      format: CompressFormat.jpeg,
+    );
+    return result?.path;
   }
 
   void _showPhotoPickerOptions() {
@@ -77,25 +115,66 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.w),
-              child: Text(
-                'Photo d\'identité',
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Poignée
+              Center(
+                child: Container(
+                  width: 40.w,
+                  height: 4.h,
+                  margin: EdgeInsets.only(bottom: 12.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey200,
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Choisir dans la galerie'),
-              onTap: () async {
-                Navigator.pop(context);
-                await _pickFile('photo');
-              },
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                child: Text(
+                  'Photo de profil',
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                ),
+              ),
+              ListTile(
+                leading: Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryBlue.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Icon(Icons.camera_alt_outlined, color: AppColors.primaryBlue, size: 22.sp),
+                ),
+                title: Text('Prendre une photo', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
+                subtitle: Text('Ouvrir la caméra', style: TextStyle(fontSize: 12.sp, color: AppColors.textHint)),
+                onTap: () async {
+                  Navigator.pop(context);
+                  await _pickImage(source: ImageSource.camera);
+                },
+              ),
+              Divider(indent: 16.w, endIndent: 16.w, height: 1),
+              ListTile(
+                leading: Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.accentGreen.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Icon(Icons.photo_library_outlined, color: AppColors.accentGreen, size: 22.sp),
+                ),
+                title: Text('Choisir dans la galerie', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
+                subtitle: Text('Depuis votre galerie de photos', style: TextStyle(fontSize: 12.sp, color: AppColors.textHint)),
+                onTap: () async {
+                  Navigator.pop(context);
+                  await _pickImage(source: ImageSource.gallery);
+                },
+              ),
+              SizedBox(height: 8.h),
+            ],
+          ),
         ),
       ),
     );

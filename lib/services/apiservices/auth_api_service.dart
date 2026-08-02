@@ -123,6 +123,26 @@ class AuthApiService {
   /// Gestion générique des erreurs réseau ou serveur
   ApiResponse _handleError(dynamic error) {
     if (error is DioException) {
+      final statusCode = error.response?.statusCode;
+
+      // Erreur 413 : fichier trop volumineux
+      if (statusCode == 413) {
+        return ApiResponse(
+          status: 'error',
+          message: 'Vos fichiers sont trop volumineux. Essayez avec des images plus légères.',
+        );
+      }
+
+      // Erreur 422 : données invalides
+      if (statusCode == 422) {
+        final responseData = error.response?.data;
+        if (responseData is Map<String, dynamic> && responseData.containsKey('message')) {
+          return ApiResponse(status: 'error', message: responseData['message']);
+        }
+        return ApiResponse(status: 'error', message: 'Données invalides. Vérifiez vos informations.');
+      }
+
+      // Erreur serveur générale
       final responseData = error.response?.data;
       if (responseData is Map<String, dynamic> && responseData.containsKey('message')) {
         return ApiResponse(
