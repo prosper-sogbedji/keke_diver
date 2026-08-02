@@ -2,20 +2,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utils/app_colors.dart';
 import '../widgets/custom_numpad.dart';
-import 'profile_screen.dart';
+import 'dashboard_screen.dart';
+import 'main_dashboard_screen.dart';
+import '../providers/auth_provider.dart';
 
-class OtpScreen extends StatefulWidget {
+class OtpScreen extends ConsumerStatefulWidget {
   final String phoneNumber;
+  final String rawPhoneNumber;
 
-  const OtpScreen({super.key, required this.phoneNumber});
+  const OtpScreen({super.key, required this.phoneNumber, required this.rawPhoneNumber});
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  ConsumerState<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends ConsumerState<OtpScreen> {
   final List<String> _code = [];
   static const int _codeLength = 5;
   bool _canResend = false;
@@ -68,43 +72,81 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
-  void _onValidate() {
-    if (_code.length == _codeLength) {
-      // TODO: verify OTP with API
-      Navigator.of(context).push(
-        PageRouteBuilder<void>(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const ProfileScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return SlideTransition(
-              position:
-                  Tween<Offset>(
-                    begin: const Offset(1.0, 0.0),
-                    end: Offset.zero,
-                  ).animate(
-                    CurvedAnimation(
-                      parent: animation,
-                      curve: Curves.easeOutCubic,
-                    ),
+  Future<void> _onValidate() async {
+    if (_code.length == _codeLength && !ref.read(authProvider).isLoading) {
+      final otp = _code.join('');
+      final success = await ref.read(authProvider.notifier).loginWithOtp(widget.rawPhoneNumber, otp);
+      
+      if (!mounted) return;
+
+      if (success) {
+        final driverStatus = ref.read(authProvider).driverStatus;
+        final Widget nextScreen;
+
+        if (driverStatus == 'active') {
+          nextScreen = const MainDashboardScreen();
+        } else {
+          // 'new' ou 'pending' -> Formulaire d'inscription/attente
+          nextScreen = const DashboardScreen();
+        }
+
+        Navigator.of(context).pushAndRemoveUntil(
+          PageRouteBuilder<void>(
+            pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
                   ),
-              child: child,
-            );
-          },
-          transitionDuration: const Duration(milliseconds: 400),
-        ),
-      );
+                ),
+                child: child,
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 400),
+          ),
+          (route) => false,
+        );
+      } else {
+        final error = ref.read(authProvider).error;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error ?? 'Code OTP invalide'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        setState(() {
+          _code.clear();
+        });
+      }
     }
   }
 
-  void _onResend() {
-    if (_canResend) {
-      // TODO: call resend API
-      _startResendTimer();
+  Future<void> _onResend() async {
+    if (_canResend && !ref.read(authProvider).isLoading) {
+      final success = await ref.read(authProvider.notifier).sendOtp(widget.rawPhoneNumber);
+      if (!mounted) return;
+      if (success) {
+        _startResendTimer();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Nouveau code envoyé'), backgroundColor: Colors.green),
+        );
+      } else {
+        final error = ref.read(authProvider).error;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error ?? 'Erreur d\'envoi'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authProvider).isLoading;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -187,7 +229,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 width: double.infinity,
                 height: 48.h,
                 child: ElevatedButton(
-                  onPressed: _code.length == _codeLength ? _onValidate : null,
+                  onPressed: (_code.length == _codeLength && !isLoading) ? _onValidate : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF003AB9),
                     foregroundColor: AppColors.white,
@@ -206,7 +248,13 @@ class _OtpScreenState extends State<OtpScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  child: const Text('Valider le code'),
+                  child: isLoading 
+                      ? SizedBox(
+                          width: 20.w, 
+                          height: 20.w, 
+                          child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.white)
+                        ) 
+                      : const Text('Valider le code'),
                 ),
               ),
             ),

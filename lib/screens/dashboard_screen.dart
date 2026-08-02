@@ -1,59 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 import '../utils/app_colors.dart';
+import '../providers/auth_provider.dart';
+import '../widgets/custom_appointment_picker.dart';
 import 'main_dashboard_screen.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  int _currentStep = 1; // 1 for Étape 1, 2 for Étape 2
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  int _currentStep = 1;
   bool _isInactive = true;
   bool _hasEngine = true;
   int _selectedVehicleIndex = 0; // 0: Voiture, 1: Tricycle, 2: Moto
   bool _appointmentScheduled = false;
+  bool _isSubmitting = false;
 
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
+  // Étape 1 — Documents
+  String? _docIdentitePath;
+  String? _docResidencePath;
+  String? _docCasierPath;
+  String? _docPhotoPath;
 
-  Future<void> _selectDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+  // Étape 1 — Contacts
+  final TextEditingController _urgenceNomController = TextEditingController();
+  final TextEditingController _urgencePrenomController = TextEditingController();
+  final TextEditingController _urgenceTelController = TextEditingController();
+  final TextEditingController _garantNomController = TextEditingController();
+  final TextEditingController _garantPrenomController = TextEditingController();
+  final TextEditingController _garantTelController = TextEditingController();
+
+  // Étape 2 — Véhicule
+  final TextEditingController _immatriculationController = TextEditingController();
+  
+  DateTime? _selectedAppointment;
+  final TextEditingController _appointmentController = TextEditingController();
+
+  final List<String> _vehiculeTypes = ['Voiture', 'Tricycle', 'Moto'];
+
+  Future<void> _pickFile(String docKey) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
     );
-    if (picked != null) {
-      final day = picked.day.toString().padLeft(2, '0');
-      final month = picked.month.toString().padLeft(2, '0');
-      _dateController.text = "$day/$month/${picked.year}";
+    if (result != null && result.files.single.path != null) {
+      setState(() {
+        switch (docKey) {
+          case 'identite':
+            _docIdentitePath = result.files.single.path;
+            break;
+          case 'residence':
+            _docResidencePath = result.files.single.path;
+            break;
+          case 'casier':
+            _docCasierPath = result.files.single.path;
+            break;
+          case 'photo':
+            _docPhotoPath = result.files.single.path;
+            break;
+        }
+      });
     }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      if (!context.mounted) return;
-      final localizations = MaterialLocalizations.of(context);
-      _timeController.text = localizations.formatTimeOfDay(
-        picked,
-        alwaysUse24HourFormat: true,
-      );
-    }
-  }
-
-  Future<void> _pickFile(String docName) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Sélectionner un fichier pour : $docName')),
-    );
   }
 
   void _showPhotoPickerOptions() {
@@ -74,29 +88,78 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.camera_alt_outlined),
-              title: const Text('Prendre une photo (Caméra)'),
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Ouverture de la caméra...')),
-                );
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.photo_library_outlined),
               title: const Text('Choisir dans la galerie'),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Ouverture de la galerie...')),
-                );
+                await _pickFile('photo');
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _submitDossier() async {
+    // Vérification que tous les documents sont sélectionnés
+    if (_docIdentitePath == null || _docResidencePath == null ||
+        _docCasierPath == null || _docPhotoPath == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Veuillez importer tous les documents requis'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    final authApiService = ref.read(authApiServiceProvider);
+    final vehicule = _vehiculeTypes[_selectedVehicleIndex];
+
+    final response = await authApiService.registerContract(
+      nom: '',
+      prenom: '',
+      email: '',
+      ville: '',
+      urgenceNom: _urgenceNomController.text,
+      urgencePrenom: _urgencePrenomController.text,
+      urgenceTel: _urgenceTelController.text,
+      garantNom: _garantNomController.text,
+      garantPrenom: _garantPrenomController.text,
+      garantTel: _garantTelController.text,
+      vehiculeType: vehicule,
+      immatriculation: _immatriculationController.text,
+      docIdentitePath: _docIdentitePath!,
+      docResidencePath: _docResidencePath!,
+      docCasierPath: _docCasierPath!,
+      docPhotoPath: _docPhotoPath!,
+    );
+
+    if (!mounted) return;
+    setState(() => _isSubmitting = false);
+
+    if (response.isSuccess) {
+      // --- MOCK ---
+      // On passe le statut à 'active' manuellement en attendant le backend.
+      await ref.read(authProvider.notifier).updateDriverStatus('active');
+      // ------------
+
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const MainDashboardScreen()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.message),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -293,59 +356,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Bienvenue, François',
-                style: TextStyle(
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Bienvenue, François',
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    _isInactive ? 'Inactif' : 'Actif',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: _isInactive
-                          ? AppColors.textHint
-                          : AppColors.primaryBlue,
-                      fontWeight: FontWeight.w500,
+                Row(
+                  children: [
+                    Text(
+                      _isInactive ? 'Inactif' : 'Actif',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: _isInactive
+                            ? AppColors.textHint
+                            : AppColors.primaryBlue,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8.w),
-                  SizedBox(
-                    height: 24.h,
-                    width: 44.w,
-                    child: Switch(
-                      value: !_isInactive,
-                      onChanged: (val) {
-                        setState(() {
-                          _isInactive = !val;
-                        });
-                        if (val) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const MainDashboardScreen(),
-                            ),
-                          );
-                        }
-                      },
-                      activeThumbColor: AppColors.white,
-                      activeTrackColor: AppColors.primaryBlue,
-                      inactiveThumbColor: AppColors.white,
-                      inactiveTrackColor: AppColors.grey200,
+                    SizedBox(width: 8.w),
+                    SizedBox(
+                      height: 24.h,
+                      width: 44.w,
+                      child: Switch(
+                        value: !_isInactive,
+                        onChanged: (val) async {
+                          setState(() {
+                            _isInactive = !val;
+                          });
+                          if (val) {
+                            // On force le statut à active manuellement
+                            await ref.read(authProvider.notifier).updateDriverStatus('active');
+                            if (context.mounted) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const MainDashboardScreen(),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        activeThumbColor: AppColors.white,
+                        activeTrackColor: AppColors.primaryBlue,
+                        inactiveThumbColor: AppColors.white,
+                        inactiveTrackColor: AppColors.grey200,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 8.h),
           Text(
             'Avant de continuer, votre profil doit être validé',
             style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
@@ -460,21 +527,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
         SizedBox(height: 16.h),
         _buildUploadField(
           "Pièce d'identité (CIP, Passeport, etc)",
-          onTap: () => _pickFile("Pièce d'identité"),
+          fileName: _docIdentitePath,
+          onTap: () => _pickFile('identite'),
         ),
         SizedBox(height: 10.h),
         _buildUploadField(
           "Attestation de résidence",
-          onTap: () => _pickFile("Attestation de résidence"),
+          fileName: _docResidencePath,
+          onTap: () => _pickFile('residence'),
         ),
         SizedBox(height: 10.h),
         _buildUploadField(
           "Casier judiciaire",
-          onTap: () => _pickFile("Casier judiciaire"),
+          fileName: _docCasierPath,
+          onTap: () => _pickFile('casier'),
         ),
         SizedBox(height: 10.h),
         _buildUploadField(
           "Photo d'identité",
+          fileName: _docPhotoPath,
           onTap: () => _showPhotoPickerOptions(),
         ),
 
@@ -494,6 +565,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: _buildInputField(
                 hint: 'Nom',
                 icon: Icons.person_outline_rounded,
+                controller: _urgenceNomController,
               ),
             ),
             SizedBox(width: 12.w),
@@ -501,6 +573,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: _buildInputField(
                 hint: 'Prénom',
                 icon: Icons.person_outline_rounded,
+                controller: _urgencePrenomController,
               ),
             ),
           ],
@@ -510,6 +583,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           hint: 'Numéro de téléphone',
           icon: Icons.phone_outlined,
           isPhone: true,
+          controller: _urgenceTelController,
         ),
 
         SizedBox(height: 24.h),
@@ -528,6 +602,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: _buildInputField(
                 hint: 'Nom',
                 icon: Icons.person_outline_rounded,
+                controller: _garantNomController,
               ),
             ),
             SizedBox(width: 12.w),
@@ -535,6 +610,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: _buildInputField(
                 hint: 'Prénom',
                 icon: Icons.person_outline_rounded,
+                controller: _garantPrenomController,
               ),
             ),
           ],
@@ -544,17 +620,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           hint: 'Numéro de téléphone',
           icon: Icons.phone_outlined,
           isPhone: true,
+          controller: _garantTelController,
         ),
 
         SizedBox(height: 32.h),
         SizedBox(
           height: 52.h,
           child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _currentStep = 2;
-              });
-            },
+            onPressed: _isSubmitting ? null : () => setState(() => _currentStep = 2),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryBlue,
               foregroundColor: AppColors.white,
@@ -563,9 +636,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               elevation: 0,
             ),
-            child: Text(
+            child: const Text(
               'Enregistrer et continuer',
-              style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -687,6 +760,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _buildInputField(
           hint: "Numéro d'immatriculation",
           icon: Icons.feed_outlined,
+          controller: _immatriculationController,
         ),
 
         SizedBox(height: 32.h),
@@ -700,28 +774,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         SizedBox(height: 16.h),
 
-        Row(
-          children: [
-            Expanded(
-              child: _buildInputField(
-                hint: 'Jour / Mois',
-                icon: Icons.calendar_today_outlined,
-                readOnly: true,
-                onTap: () => _selectDate(context),
-                controller: _dateController,
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: _buildInputField(
-                hint: 'Heure',
-                icon: Icons.access_time,
-                readOnly: true,
-                onTap: () => _selectTime(context),
-                controller: _timeController,
-              ),
-            ),
-          ],
+        _buildInputField(
+          hint: 'Mois/jour / Horaire',
+          icon: Icons.calendar_today_outlined,
+          readOnly: true,
+          controller: _appointmentController,
+          onTap: () async {
+            final picked = await CustomAppointmentPicker.show(context, initialDate: _selectedAppointment);
+            if (picked != null) {
+              setState(() {
+                _selectedAppointment = picked;
+                final day = picked.day.toString().padLeft(2, '0');
+                final month = picked.month.toString().padLeft(2, '0');
+                final hour = picked.hour.toString().padLeft(2, '0');
+                final minute = picked.minute.toString().padLeft(2, '0');
+                _appointmentController.text = '$day/$month/${picked.year} - $hour:$minute';
+              });
+            }
+          },
         ),
 
         SizedBox(height: 48.h),
@@ -751,11 +821,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: SizedBox(
                 height: 52.h,
                 child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _appointmentScheduled = true;
-                    });
-                  },
+                  onPressed: _isSubmitting ? null : _submitDossier,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryBlue,
                     foregroundColor: AppColors.white,
@@ -764,10 +830,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: Text(
-                    'Enregistrer et valider',
-                    style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
-                  ),
+                  child: _isSubmitting
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Text(
+                          'Enregistrer et valider',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                        ),
                 ),
               ),
             ),
@@ -954,31 +1026,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildUploadField(String label, {VoidCallback? onTap}) {
+  Widget _buildUploadField(String label, {VoidCallback? onTap, String? fileName}) {
+    final hasFile = fileName != null;
+    final displayName = hasFile ? fileName.split('/').last.split('\\').last : label;
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         height: 48.h,
         padding: EdgeInsets.symmetric(horizontal: 14.w),
         decoration: BoxDecoration(
-          color: const Color(0xFFF5F5F5),
+          color: hasFile
+              ? AppColors.accentGreen.withValues(alpha: 0.07)
+              : const Color(0xFFF5F5F5),
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: AppColors.grey200, width: 1),
+          border: Border.all(
+            color: hasFile ? AppColors.accentGreen : AppColors.grey200,
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Text(
-                label,
-                style: TextStyle(fontSize: 13.sp, color: AppColors.textHint),
+                displayName,
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  color: hasFile ? AppColors.accentGreen : AppColors.textHint,
+                  fontWeight: hasFile ? FontWeight.w500 : FontWeight.normal,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Icon(
-              Icons.file_upload_outlined,
-              color: AppColors.grey400,
+              hasFile ? Icons.check_circle_outline : Icons.file_upload_outlined,
+              color: hasFile ? AppColors.accentGreen : AppColors.grey400,
               size: 20.sp,
             ),
           ],

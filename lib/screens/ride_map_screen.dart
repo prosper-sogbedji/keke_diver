@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../utils/app_colors.dart';
 import 'chat_screen.dart';
 import 'ride_finished_screen.dart';
+import 'support_screen.dart';
 
 enum RideState {
   enRouteToPickup,
@@ -443,7 +444,10 @@ class _RideMapScreenState extends State<RideMapScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            // Support action
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const SupportScreen()),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF2B364A),

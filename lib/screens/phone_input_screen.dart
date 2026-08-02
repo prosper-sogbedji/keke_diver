@@ -3,20 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utils/app_colors.dart';
 import '../utils/phone_rules.dart';
 import '../utils/phone_validator.dart';
 import '../widgets/custom_numpad.dart';
 import 'otp_screen.dart';
+import '../providers/auth_provider.dart';
 
-class PhoneInputScreen extends StatefulWidget {
+class PhoneInputScreen extends ConsumerStatefulWidget {
   const PhoneInputScreen({super.key});
 
   @override
-  State<PhoneInputScreen> createState() => _PhoneInputScreenState();
+  ConsumerState<PhoneInputScreen> createState() => _PhoneInputScreenState();
 }
 
-class _PhoneInputScreenState extends State<PhoneInputScreen> {
+class _PhoneInputScreenState extends ConsumerState<PhoneInputScreen> {
   String _phoneNumber = '';
   String _countryCode = '+229';
   String _countryFlag = '🇧🇯';
@@ -65,30 +67,41 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
 
     setState(() => _isValidating = true);
 
-    // TODO: remplace par ta vraie logique de validation asynchrone (API, etc.)
-    await Future.delayed(const Duration(milliseconds: 500));
+    final fullPhone = '$_countryCode${_phoneNumber.replaceAll(' ', '')}';
+    final success = await ref.read(authProvider.notifier).sendOtp(fullPhone);
 
     if (!mounted) return;
     setState(() => _isValidating = false);
 
-    Navigator.of(context).push(
-      PageRouteBuilder<void>(
-        pageBuilder: (_, __, ___) => OtpScreen(
-          phoneNumber: '$_countryCode ${_formatPhone(_phoneNumber)}',
+    if (success) {
+      Navigator.of(context).push(
+        PageRouteBuilder<void>(
+          pageBuilder: (_, __, ___) => OtpScreen(
+            phoneNumber: '$_countryCode ${_formatPhone(_phoneNumber)}',
+            rawPhoneNumber: fullPhone,
+          ),
+          transitionsBuilder: (_, animation, __, child) => SlideTransition(
+            position:
+                Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+                ),
+            child: child,
+          ),
+          transitionDuration: const Duration(milliseconds: 400),
         ),
-        transitionsBuilder: (_, animation, __, child) => SlideTransition(
-          position:
-              Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
-                end: Offset.zero,
-              ).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
-              ),
-          child: child,
+      );
+    } else {
+      final error = ref.read(authProvider).error;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error ?? 'Erreur lors de l\'envoi du SMS'),
+          backgroundColor: Colors.red,
         ),
-        transitionDuration: const Duration(milliseconds: 400),
-      ),
-    );
+      );
+    }
   }
 
   @override

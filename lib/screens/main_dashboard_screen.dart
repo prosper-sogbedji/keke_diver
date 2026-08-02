@@ -23,13 +23,7 @@ class MainDashboardScreen extends ConsumerStatefulWidget {
 
 class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   int _currentIndex = 0;
-  int _currentPromoPage = 0;
-  final _promoController = PageController(viewportFraction: 0.93);
-  Timer? _promoTimer;
   String _statsFilter = 'Aujourd\'hui';
-  String _activityFilter = 'Tout';
-
-  final _promoCount = 2;
 
   @override
   void initState() {
@@ -40,38 +34,15 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-    _startPromoTimer();
   }
 
   @override
   void dispose() {
-    _promoTimer?.cancel();
-    _promoController.dispose();
     super.dispose();
-  }
-
-  void _startPromoTimer() {
-    _promoTimer?.cancel();
-    _promoTimer = Timer.periodic(const Duration(seconds: 4), (_) {
-      if (_promoController.hasClients) {
-        final next = (_currentPromoPage + 1) % _promoCount;
-        _promoController.animateToPage(
-          next,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
   }
 
   void _onStatsFilterChanged(String value) {
     setState(() => _statsFilter = value);
-  }
-
-  void _onActivityFilterChanged() {
-    setState(() {
-      _activityFilter = _activityFilter == 'Tout' ? 'Terminées' : 'Tout';
-    });
   }
 
   void _showRideRequest() {
@@ -330,7 +301,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         ),
                       ],
                     ),
-                    Container(width: 1.w, height: 30.h, color: AppColors.grey200),
+                    Container(
+                      width: 1.w,
+                      height: 30.h,
+                      color: AppColors.grey200,
+                    ),
                     Column(
                       children: [
                         Text(
@@ -351,7 +326,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                         ),
                       ],
                     ),
-                    Container(width: 1.w, height: 30.h, color: AppColors.grey200),
+                    Container(
+                      width: 1.w,
+                      height: 30.h,
+                      color: AppColors.grey200,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -437,9 +416,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       case 3:
         return const ActiviteTab();
       case 4:
-        return ProfilTab(
-          onBack: () => setState(() => _currentIndex = 0),
-        );
+        return ProfilTab(onBack: () => setState(() => _currentIndex = 0));
       default:
         return Center(
           child: Text('Inconnu', style: TextStyle(color: AppColors.textHint)),
@@ -448,8 +425,6 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
   }
 
   Widget _buildAccueilTab() {
-    final isActive = ref.watch(isDriverActiveProvider);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -458,11 +433,8 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
           _buildWalletCard(),
           _buildStatusSection(),
           _buildServicesToggle(),
-          if (isActive) _buildActiveRideCard(),
           _buildEnginCard(),
           _buildContractCard(),
-          SizedBox(height: 16.h),
-          _buildPromoCarousel(),
           SizedBox(height: 24.h),
           _buildStatisticsSection(),
           _buildRecentActivities(),
@@ -485,7 +457,11 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             height: 32.h,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
-              return Icon(Icons.broken_image, color: AppColors.primaryBlue, size: 32.sp);
+              return Icon(
+                Icons.broken_image,
+                color: AppColors.primaryBlue,
+                size: 32.sp,
+              );
             },
           ),
           Row(
@@ -504,7 +480,10 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(8.w),
-                      child: Icon(Icons.notifications_none_rounded, size: 28.sp),
+                      child: Icon(
+                        Icons.notifications_none_rounded,
+                        size: 28.sp,
+                      ),
                     ),
                     Positioned(
                       right: 4.w,
@@ -581,22 +560,31 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
             ),
             Row(
               children: [
-                _buildCardButton(Icons.add, onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Rechargement bientôt disponible'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }),
+                _buildCardButton(
+                  Icons.add,
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Rechargement bientôt disponible'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
                 SizedBox(width: 12.w),
-                _buildCardButton(Icons.file_upload, onTap: () {
-                  setState(() => _currentIndex = 1);
-                }),
+                _buildCardButton(
+                  Icons.file_upload,
+                  onTap: () {
+                    setState(() => _currentIndex = 1);
+                  },
+                ),
                 SizedBox(width: 12.w),
-                _buildCardButton(Icons.history_rounded, onTap: () {
-                  setState(() => _currentIndex = 3);
-                }),
+                _buildCardButton(
+                  Icons.history_rounded,
+                  onTap: () {
+                    setState(() => _currentIndex = 3);
+                  },
+                ),
               ],
             ),
           ],
@@ -743,260 +731,13 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     );
   }
 
-  Widget _buildActiveRideCard() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(24.w, 0.h, 24.w, 16.h),
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: AppColors.grey50,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: AppColors.grey200),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 20.r,
-                  backgroundColor: AppColors.grey200,
-                  backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/100?img=11',
-                  ),
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Codjo Igor Z.',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        '14:50 - N° 77052B07',
-                        style: TextStyle(
-                          fontSize: 11.sp,
-                          color: AppColors.textHint,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 6.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.accentGreen.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Text(
-                    'En cours',
-                    style: TextStyle(
-                      color: AppColors.accentGreen,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.sp,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20.h),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 12.w,
-                      height: 12.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primaryBlue,
-                          width: 3.w,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(height: 2.h, color: AppColors.primaryBlue),
-                    ),
-                    Container(
-                      width: 12.w,
-                      height: 12.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.accentGreen,
-                          width: 3.w,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Gbegamey, Cotonou',
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            'Départ à 5 min de vous',
-                            style: TextStyle(
-                              fontSize: 11.sp,
-                              color: AppColors.textHint,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: Icon(
-                        Icons.arrow_forward_rounded,
-                        size: 16.sp,
-                        color: AppColors.textHint,
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Boulevard Steinmetz, Cotonou',
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            'Arrivée',
-                            style: TextStyle(
-                              fontSize: 11.sp,
-                              color: AppColors.textHint,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20.h),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 12.h),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.grey200)),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Tarif estimé',
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: AppColors.textHint,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          '1 200F',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(width: 1.w, height: 24.h, color: AppColors.grey200),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Distance',
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: AppColors.textHint,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          '14,08 km',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(width: 1.w, height: 24.h, color: AppColors.grey200),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Durée',
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: AppColors.textHint,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          '≈1h20 min',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildEnginCard() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Container(
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: AppColors.grey50,
+          color: AppColors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16.r),
             topRight: Radius.circular(16.r),
@@ -1139,126 +880,6 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
     );
   }
 
-  Widget _buildPromoCarousel() {
-    return SizedBox(
-      height: 104.h,
-      child: PageView.builder(
-        controller: _promoController,
-        padEnds: false,
-        onPageChanged: (page) => setState(() => _currentPromoPage = page),
-        itemCount: _promoCount,
-        itemBuilder: (_, index) {
-          final isPromo = index == 0;
-          final badgeText = isPromo ? 'Promo' : 'Parrainage';
-          final descText = isPromo 
-              ? '-25% sur votre\npremière course !' 
-              : 'Gagnez 500 F\npar filleul !';
-
-          return Container(
-            margin: EdgeInsets.only(
-              left: 16.w,
-              right: index == _promoCount - 1 ? 16.w : 6.w,
-            ),
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              color: AppColors.primaryBlue,
-            ),
-            child: Stack(
-              children: [
-                // Right side image taking exactly half the banner, without gradient
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 175.w,
-                  child: Image.asset(
-                    'assets/images/promo_banner.png',
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      child: Icon(
-                        isPromo ? Icons.local_shipping_rounded : Icons.people_rounded,
-                        color: Colors.white.withValues(alpha: 0.2),
-                        size: 48.sp,
-                      ),
-                    ),
-                  ),
-                ),
-                // Left side content (Promo badge and text)
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  right: 175.w, // Ensures it stays strictly on the blue side
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 4.w, 16.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF5AB315),
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                          child: Text(
-                            badgeText,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11.sp,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Expanded(
-                          child: Text(
-                            descText,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.sp,
-                              height: 1.15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Circular button vertically centered, placed entirely on the blue background
-                Positioned(
-                  right: 180.w, // Placed safely on the blue background, next to the image
-                  top: 0,
-                  bottom: 0,
-                  child: Center(
-                    child: Container(
-                      padding: EdgeInsets.all(6.w),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 2.w), // slight visual centering for arrow
-                        child: Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: AppColors.primaryBlue,
-                          size: 14.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   Widget _buildStatisticsSection() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -1281,26 +902,31 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 offset: Offset(0, 36.h),
-                itemBuilder: (context) => [
-                  'Aujourd\'hui', 'Hier', 'Cette semaine', 'Ce mois', 'Cette année'
-                ].map((period) {
-                  return PopupMenuItem<String>(
-                    value: period,
-                    height: 36.h,
-                    child: Text(
-                      period,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: _statsFilter == period
-                            ? AppColors.primaryBlue
-                            : AppColors.textPrimary,
-                        fontWeight: _statsFilter == period
-                            ? FontWeight.w600
-                            : FontWeight.normal,
-                      ),
-                    ),
-                  );
-                }).toList(),
+                itemBuilder: (context) =>
+                    [
+                      'Aujourd\'hui',
+                      'Hier',
+                      'Cette semaine',
+                      'Ce mois',
+                      'Cette année',
+                    ].map((period) {
+                      return PopupMenuItem<String>(
+                        value: period,
+                        height: 36.h,
+                        child: Text(
+                          period,
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            color: _statsFilter == period
+                                ? AppColors.primaryBlue
+                                : AppColors.textPrimary,
+                            fontWeight: _statsFilter == period
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 12.w,
@@ -1348,7 +974,104 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
             ],
           ),
+          SizedBox(height: 12.h),
+          Row(
+            children: [
+              Expanded(
+                child: _buildColoredStatCard(
+                  icon: Icons.info_outline_rounded,
+                  title: '6 000 F',
+                  subtitle: 'À payer',
+                  colors: [
+                    const Color(0xFFE53935),
+                    const Color(0xFF8E0000),
+                  ], // Red gradient
+                  onTap: () {},
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: _buildColoredStatCard(
+                  icon: Icons.star_border_rounded,
+                  title: '4,3/5',
+                  subtitle: 'Note globale',
+                  colors: [
+                    const Color(0xFF64DD17),
+                    const Color(0xFF33691E),
+                  ], // Green gradient
+                  onTap: () {},
+                ),
+              ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildColoredStatCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required List<Color> colors,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 64.h,
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36.w,
+              height: 36.h,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Icon(icon, size: 18.sp, color: colors.last),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: AppColors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: AppColors.white,
+              size: 16.sp,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1393,10 +1116,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    color: AppColors.textHint,
-                  ),
+                  style: TextStyle(fontSize: 10.sp, color: AppColors.textHint),
                 ),
               ],
             ),
@@ -1408,12 +1128,9 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
 
   Widget _buildRecentActivities() {
     final recentRides = ref.watch(recentRidesProvider);
-    final filteredRides = _activityFilter == 'Terminées'
-        ? recentRides.where((r) => r.status == RideStatus.completed).toList()
-        : recentRides;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1429,47 +1146,31 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: _onActivityFilterChanged,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: _activityFilter == 'Terminées'
-                        ? AppColors.primaryBlue.withValues(alpha: 0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        _activityFilter == 'Terminées' ? 'Terminées' : 'Tout voir',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                          color: _activityFilter == 'Terminées'
-                              ? AppColors.primaryBlue
-                              : AppColors.primaryBlue,
-                        ),
+                onTap: () {
+                  setState(() => _currentIndex = 2);
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'Tout voir',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primaryBlue,
                       ),
-                      AnimatedRotation(
-                        turns: _activityFilter == 'Terminées' ? 0.5 : 0,
-                        duration: const Duration(milliseconds: 250),
-                        child: Icon(
-                          _activityFilter == 'Terminées'
-                              ? Icons.filter_list_off_rounded
-                              : Icons.chevron_right_rounded,
-                          size: 16.sp,
-                          color: AppColors.primaryBlue,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 16.sp,
+                      color: AppColors.primaryBlue,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
           SizedBox(height: 16.h),
-          if (filteredRides.isEmpty)
+          if (recentRides.isEmpty)
             Padding(
               padding: EdgeInsets.symmetric(vertical: 24.h),
               child: Center(
@@ -1480,7 +1181,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
               ),
             )
           else
-            ...filteredRides.map(
+            ...recentRides.map(
               (ride) => Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: Row(
@@ -1563,7 +1264,7 @@ class _MainDashboardScreenState extends ConsumerState<MainDashboardScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.home_outlined, 'Accueil'),
+          _buildNavItem(0, Icons.home_filled, 'Accueil'),
           _buildNavItem(1, Icons.payments_outlined, 'Paiements'),
           _buildNavItem(2, Icons.insert_drive_file_outlined, 'Contrat'),
           _buildNavItem(3, Icons.article_outlined, 'Activité'),
