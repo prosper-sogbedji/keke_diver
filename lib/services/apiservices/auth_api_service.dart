@@ -74,6 +74,7 @@ class AuthApiService {
   Future<ApiResponse> registerContract({
     required String nom,
     required String prenom,
+    required String telephone,
     required String email,
     required String ville,
     required String urgenceNom,
@@ -82,17 +83,24 @@ class AuthApiService {
     required String garantNom,
     required String garantPrenom,
     required String garantTel,
+    required String garant2Nom,
+    required String garant2Prenom,
+    required String garant2Tel,
     required String vehiculeType,
     required String immatriculation,
     required String docIdentitePath,
     required String docResidencePath,
     required String docCasierPath,
     required String docPhotoPath,
+    required String rdvDate,
+    required String rdvStartTime,
+    required String rdvEndTime,
   }) async {
     try {
       final formData = FormData.fromMap({
         'driver_nom': nom,
         'driver_prenom': prenom,
+        'driver_telephone': telephone,
         'driver_mail': email,
         'driver_ville': ville,
         'urgence_nom': urgenceNom,
@@ -101,8 +109,14 @@ class AuthApiService {
         'garant_nom': garantNom,
         'garant_prenom': garantPrenom,
         'garant_telephone': garantTel,
+        'garant2_nom': garant2Nom,
+        'garant2_prenom': garant2Prenom,
+        'garant2_telephone': garant2Tel,
         'vehicule_type': vehiculeType,
         'vehicule_immatriculation': immatriculation,
+        'rdv_date': rdvDate,
+        'rdv_start_time': rdvStartTime,
+        'rdv_end_time': rdvEndTime,
         'doc_identite': await MultipartFile.fromFile(docIdentitePath, filename: 'identite'),
         'doc_residence': await MultipartFile.fromFile(docResidencePath, filename: 'residence'),
         'doc_casier': await MultipartFile.fromFile(docCasierPath, filename: 'casier'),
@@ -136,8 +150,26 @@ class AuthApiService {
       // Erreur 422 : données invalides
       if (statusCode == 422) {
         final responseData = error.response?.data;
-        if (responseData is Map<String, dynamic> && responseData.containsKey('message')) {
-          return ApiResponse(status: 'error', message: responseData['message']);
+        if (responseData is Map<String, dynamic>) {
+          String errorMessage = responseData['message'] ?? 'Données invalides.';
+          
+          // Si le backend renvoie des détails sur les champs invalides
+          if (responseData.containsKey('errors') && responseData['errors'] is Map) {
+            final errors = responseData['errors'] as Map;
+            List<String> errorMessages = [];
+            errors.forEach((key, value) {
+              if (value is List) {
+                errorMessages.add("- $key : ${value.join(', ')}");
+              } else {
+                errorMessages.add("- $key : $value");
+              }
+            });
+            if (errorMessages.isNotEmpty) {
+              errorMessage = "Erreurs de validation :\n${errorMessages.join('\n')}";
+            }
+          }
+          
+          return ApiResponse(status: 'error', message: errorMessage);
         }
         return ApiResponse(status: 'error', message: 'Données invalides. Vérifiez vos informations.');
       }

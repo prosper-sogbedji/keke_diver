@@ -31,6 +31,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   String? _docCasierPath;
   String? _docPhotoPath;
 
+  // Étape 1 — Chauffeur
+  final TextEditingController _driverNomController = TextEditingController();
+  final TextEditingController _driverPrenomController = TextEditingController();
+  final TextEditingController _driverTelController = TextEditingController();
+
   // Étape 1 — Contacts
   final TextEditingController _urgenceNomController = TextEditingController();
   final TextEditingController _urgencePrenomController = TextEditingController();
@@ -38,6 +43,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   final TextEditingController _garantNomController = TextEditingController();
   final TextEditingController _garantPrenomController = TextEditingController();
   final TextEditingController _garantTelController = TextEditingController();
+  final TextEditingController _garant2NomController = TextEditingController();
+  final TextEditingController _garant2PrenomController = TextEditingController();
+  final TextEditingController _garant2TelController = TextEditingController();
 
   // Étape 2 — Véhicule
   final TextEditingController _immatriculationController = TextEditingController();
@@ -198,23 +206,42 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final authApiService = ref.read(authApiServiceProvider);
     final vehicule = _vehiculeTypes[_selectedVehicleIndex];
 
+    String formatPhone(String raw) {
+      if (raw.isEmpty) return '';
+      final digits = raw.replaceAll(RegExp(r'\D'), '');
+      return '+229$digits';
+    }
+
     final response = await authApiService.registerContract(
-      nom: '',
-      prenom: '',
-      email: '',
+      nom: _driverNomController.text,
+      prenom: _driverPrenomController.text,
+      telephone: formatPhone(_driverTelController.text),
+      email: '', // L'email ne semble pas requis selon l'erreur
       ville: '',
       urgenceNom: _urgenceNomController.text,
       urgencePrenom: _urgencePrenomController.text,
-      urgenceTel: _urgenceTelController.text,
+      urgenceTel: formatPhone(_urgenceTelController.text),
       garantNom: _garantNomController.text,
       garantPrenom: _garantPrenomController.text,
-      garantTel: _garantTelController.text,
+      garantTel: formatPhone(_garantTelController.text),
+      garant2Nom: _garant2NomController.text,
+      garant2Prenom: _garant2PrenomController.text,
+      garant2Tel: formatPhone(_garant2TelController.text),
       vehiculeType: vehicule,
       immatriculation: _immatriculationController.text,
       docIdentitePath: _docIdentitePath!,
       docResidencePath: _docResidencePath!,
       docCasierPath: _docCasierPath!,
       docPhotoPath: _docPhotoPath!,
+      rdvDate: _selectedAppointment != null 
+          ? '${_selectedAppointment!.year}-${_selectedAppointment!.month.toString().padLeft(2, '0')}-${_selectedAppointment!.day.toString().padLeft(2, '0')}' 
+          : '',
+      rdvStartTime: _selectedAppointment != null 
+          ? '${_selectedAppointment!.hour.toString().padLeft(2, '0')}:${_selectedAppointment!.minute.toString().padLeft(2, '0')}:00' 
+          : '',
+      rdvEndTime: _selectedAppointment != null 
+          ? '${_selectedAppointment!.add(const Duration(minutes: 45)).hour.toString().padLeft(2, '0')}:${_selectedAppointment!.add(const Duration(minutes: 45)).minute.toString().padLeft(2, '0')}:00' 
+          : '',
     );
 
     if (!mounted) return;
@@ -630,6 +657,43 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
         SizedBox(height: 24.h),
         Text(
+          'Vos informations personnelles',
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        SizedBox(height: 16.h),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputField(
+                hint: 'Nom',
+                icon: Icons.person_outline_rounded,
+                controller: _driverNomController,
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Prénom',
+                icon: Icons.person_outline_rounded,
+                controller: _driverPrenomController,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        _buildInputField(
+          hint: 'Numéro de téléphone',
+          icon: Icons.phone_outlined,
+          isPhone: true,
+          controller: _driverTelController,
+        ),
+
+        SizedBox(height: 24.h),
+        Text(
           'Personne à contacter en cas d\'urgence',
           style: TextStyle(
             fontSize: 14.sp,
@@ -700,6 +764,43 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           icon: Icons.phone_outlined,
           isPhone: true,
           controller: _garantTelController,
+        ),
+
+        SizedBox(height: 24.h),
+        Text(
+          'Second Avaliseur ou garant',
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        SizedBox(height: 16.h),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputField(
+                hint: 'Nom',
+                icon: Icons.person_outline_rounded,
+                controller: _garant2NomController,
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: _buildInputField(
+                hint: 'Prénom',
+                icon: Icons.person_outline_rounded,
+                controller: _garant2PrenomController,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        _buildInputField(
+          hint: 'Numéro de téléphone',
+          icon: Icons.phone_outlined,
+          isPhone: true,
+          controller: _garant2TelController,
         ),
 
         SizedBox(height: 32.h),
