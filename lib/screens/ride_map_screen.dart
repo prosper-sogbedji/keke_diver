@@ -299,7 +299,10 @@ class _RideMapScreenState extends State<RideMapScreen> {
                         context: context,
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
-                        builder: (_) => const ChatScreen(),
+                        builder: (_) => const ChatScreen(
+                          title: 'Chat avec le client',
+                          showDragHandle: true,
+                        ),
                       );
                     }),
                   ],

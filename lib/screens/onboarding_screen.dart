@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import '../widgets/green_wave_painter.dart';
 import 'phone_input_screen.dart';
+import 'pdf_viewer_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -264,7 +266,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           SizedBox(height: 20.h),
 
-          // Terms text
+          // Terms text — liens cliquables vers PDF Viewer
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Text.rich(
@@ -285,6 +287,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decorationColor:
                           AppColors.textSecondary.withValues(alpha: 0.4),
                     ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PdfViewerScreen(
+                              title: "Conditions d'utilisation",
+                              assetPath: 'assets/doc/CGU_KEKE_BENIN.pdf',
+                            ),
+                          ),
+                        );
+                      },
                   ),
                   const TextSpan(text: " et notre "),
                   TextSpan(
@@ -296,6 +310,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decorationColor:
                           AppColors.textSecondary.withValues(alpha: 0.4),
                     ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PdfViewerScreen(
+                              title: 'Politique de confidentialité',
+                              assetPath:
+                                  'assets/doc/Politique_de_Confidentialite_KEKE_BENIN.pdf',
+                            ),
+                          ),
+                        );
+                      },
                   ),
                 ],
               ),

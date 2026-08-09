@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flutter_iconly/flutter_iconly.dart';
 import '../../providers/driver_state_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../utils/app_colors.dart';
+import '../onboarding_screen.dart';
+import '../pdf_viewer_screen.dart';
 
 class ProfilTab extends ConsumerStatefulWidget {
   final VoidCallback? onBack;
@@ -305,7 +307,87 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
 
               // Footer — "Conditions d'utilisation" link
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  // Choix entre CGU et Politique
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: AppColors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20.r),
+                      ),
+                    ),
+                    builder: (_) => Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.w, vertical: 24.h),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 40.w, height: 4.h,
+                            margin: EdgeInsets.only(bottom: 20.h),
+                            decoration: BoxDecoration(
+                              color: AppColors.grey200,
+                              borderRadius: BorderRadius.circular(2.r),
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.description_outlined,
+                                color: AppColors.primaryBlue),
+                            title: Text("Conditions d'utilisation",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                )),
+                            trailing: Icon(Icons.chevron_right,
+                                color: AppColors.textHint),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PdfViewerScreen(
+                                    title: "Conditions d'utilisation",
+                                    assetPath:
+                                        'assets/doc/CGU_KEKE_BENIN.pdf',
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          Divider(color: AppColors.grey200),
+                          ListTile(
+                            leading: Icon(Icons.privacy_tip_outlined,
+                                color: AppColors.primaryBlue),
+                            title: Text('Politique de confidentialité',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                )),
+                            trailing: Icon(Icons.chevron_right,
+                                color: AppColors.textHint),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PdfViewerScreen(
+                                    title: 'Politique de confidentialité',
+                                    assetPath:
+                                        'assets/doc/Politique_de_Confidentialite_KEKE_BENIN.pdf',
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 8.h),
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 child: Row(
                   children: [
                     Text(
@@ -330,7 +412,40 @@ class _ProfilTabState extends ConsumerState<ProfilTab> {
 
               // Footer — Déconnexion
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Déconnexion'),
+                      content: const Text(
+                          'Êtes-vous sûr de vouloir vous déconnecter ?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: const Text('Annuler'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: Text(
+                            'Déconnexion',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (confirmed == true && context.mounted) {
+                    await ref.read(authProvider.notifier).logout();
+                    if (context.mounted) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (_) => const OnboardingScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  }
+                },
                 child: Row(
                   children: [
                     Icon(Icons.logout, color: AppColors.textPrimary, size: 20.sp),
